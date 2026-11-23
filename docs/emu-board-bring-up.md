@@ -357,8 +357,7 @@ judge.
 ### 2026-11-22, fw-v1.0.0
 
 Board 0001 with fw-v1.0.0 (fe3802acd01d, `vp`), the release image
-from CI, in the 58503A; the 58503A with a "new" OCXO (05071-60219), its
-coarse adjustment not trimmed.  The CNS at `@@Ay` 999 999 000 ns (its
+from CI, in the 58503A.  The CNS at `@@Ay` 999 999 000 ns (its
 pulse 1 us early) and `@@Az` 48 ns.  The 53230A: CNS rear on channel
 1 at 1.88 V, the 58503A on channel 2 at 1.43 V, 1 MOhm, DC.  The
 58503A's status read once a second by its own monitor, not by the
@@ -375,7 +374,6 @@ board.
 | Locked, 02:31 to 18:19 | no alarm, holdover or logged error; tracking 6 to 8 |
 | The 58503A's own TI, hourly means, 03:00 to 12:00 | -94 to +53 ns: a damped swing after pull-in |
 | Its own TI, 13:00 to 18:19 | hourly means +10 to +23 ns; -14 to +38 ns |
-| The same, the old OCXO with board 0005, 11-19 to 11-20 | hourly means -411 to +377 ns; -610 to +708 ns |
 | EFC | 40.1 % at lock to 36.0 %, 0.5 %/h falling to 0.13 %/h |
 | The counter less 1 us less its own reading, hourly | 46.0 to 48.0 ns medians, 1.6 to 2.8 ns sd (about 47 ns with board 0005, 11-19) |
 | Board 0005 on the jig less the CNS, qErr out, 52,279 s | 1034.4 ns median, 1.40 ns spread (6.18 raw); r -0.974 with qErr |
