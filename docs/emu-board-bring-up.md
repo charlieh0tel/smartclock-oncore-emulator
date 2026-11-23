@@ -404,6 +404,15 @@ at 1 s and 9.2e-12 at 1000 s, its TDEV 0.55 ns at 100 s and 4.6 ns at
 gives the same to within 0.25 ns up to 200 s; the 58503A 2.89 ns at
 500 s and 7.48 ns at 1000 s.
 
+### The 58503A's oven-current coefficient
+
+`:DIAG:ROSC:TCO` (the loop's oven-current term, in the EEPROM's
+calibration block; smartclock `docs/firmware/loop.md`, "s, the
+oscillator current"): -60 from 2026-11-23 21:12 UTC, was -33.65, the
+value for the 58503A's old oscillator.  The 05071-60219's, estimated
+from its DAC against aging (a + b y + c ln y) and oven current over
+11-22 08:00 to 11-23 20:00: -84 to -89.
+
 ### Bias against UTC
 
 The 58503A's rear 1 PPS, estimated against UTC from the CNS Clock II
