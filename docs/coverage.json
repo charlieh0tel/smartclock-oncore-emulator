@@ -1,18 +1,18 @@
 {
   "title": "Coverage by instrument",
-  "intro": "Which instrument images the emulator has been run against, and how: a row per image, a column per way of running it or test. The against-the-image columns run the instrument's image from power-on, without its 1 PPS input under test; the hardware columns run the instrument itself; the leap second columns run oncore-host's test hooks against the image. A Yes, Partial or In review links to where the repository records it, and the generator checks that the section is there.",
+  "intro": "Which instrument images the emulator has been run against, and how: a row per image, a column per way of running it or test. The in-emulation columns run the instrument's image in emulation from power-on, without its 1 PPS input under test; the hardware columns run the instrument itself; the leap second columns run oncore-host's test hooks against the image. A Yes, Partial or In review links to where the repository records it, and the generator checks that the section is there.",
   "columns": [
     {
       "key": "host_image",
       "title": "oncore-host",
-      "group": "Against the image",
-      "means": "oncore-host on a PC, a u-blox through gpsd, against the instrument's image."
+      "group": "In emulation",
+      "means": "oncore-host on a PC, a u-blox through gpsd, against the instrument's image in emulation."
     },
     {
       "key": "board_image",
       "title": "Board",
-      "group": "Against the image",
-      "means": "The emulator board on the jig, against the image."
+      "group": "In emulation",
+      "means": "The emulator board on the jig, against the image in emulation."
     },
     {
       "key": "host_hw",
@@ -30,13 +30,13 @@
       "key": "leap_pending",
       "title": "Leap second pending",
       "group": "Leap second",
-      "means": "oncore-host --leap-pending against the image: the image reports the scheduled leap second (:PTIM:LEAP:ACC?, :STAT?, :DATE?, :DUR? and its status screen)."
+      "means": "oncore-host --leap-pending against the image in emulation: the image reports the scheduled leap second (:PTIM:LEAP:ACC?, :STAT?, :DATE?, :DUR? and its status screen)."
     },
     {
       "key": "leap_crossing",
       "title": "Leap second crossing",
       "group": "Leap second",
-      "means": "oncore-host --fake-time and --leap-pending against the image, across a quarter's end: the image's time and leap seconds through 23:59:60 and after."
+      "means": "oncore-host --fake-time and --leap-pending against the image in emulation, across a quarter's end: the image's time and leap seconds through 23:59:60 and after."
     }
   ],
   "statuses": {

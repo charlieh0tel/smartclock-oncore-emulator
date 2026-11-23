@@ -75,8 +75,8 @@ One frame failed its checksum in that run; which one was not recorded.
 
 ## The 58503A 3704 image
 
-The 58503A 3704 image with the 58503A 3710A01056's EEPROM, from
-power-on, its GPS port on the board on the jig at 9600.  The board's
+The 58503A 3704 image in emulation, with the 58503A 3710A01056's
+EEPROM, from power-on, its GPS port on the board on the jig at 9600.  The board's
 1 PPS is not tested here.  The OCXO warm-up was skipped.
 
 From power-on, the board read first over the jig: B1121P1114, software
@@ -164,7 +164,7 @@ SSG0163878, within 0.2 dB across satellites.
 
 ## 58503B 1.01.04
 
-The 58503B 1.01.04 image with an erased EEPROM, on the second board with the production build of d81fd8b, which answers `@@Ta`.
+The 58503B 1.01.04 image in emulation, with an erased EEPROM, on the second board with the production build of d81fd8b, which answers `@@Ta`.
 Warm-up skipped.  1 PPS as above.
 
 | Check | Result |
@@ -181,7 +181,7 @@ Warm-up skipped.  1 PPS as above.
 
 ## Z3816A 4001
 
-The Z3816A 4001 image with a synthetic EEPROM and its time code off, on
+The Z3816A 4001 image in emulation, with a synthetic EEPROM and its time code off, on
 the second board with the production build of 02f0c2b.  Warm-up skipped.  1 PPS as above.
 
 | Check | Result |
@@ -196,7 +196,8 @@ the second board with the production build of 02f0c2b.  Warm-up skipped.  1 PPS 
 
 ## Every image, 2026-11-16
 
-Every image on each build it can meet, on the second board on the jig
+Every image in emulation, on each build it can meet, on the second
+board on the jig
 (the jig's LEA-M8T, live sky), 095ad35 with smartclock-gps cb968ece.
 Each cell: the build flashed over SWD, the image from power-on with its
 warm-up skipped and a fresh copy of its EEPROM, lock, 15 minutes locked
@@ -227,7 +228,8 @@ at power-on it went to TIMEREF2 at once.
 
 ## Z3801A and Z3805A on the first board
 
-The first board, 6d5120f, two runs of the Z3801A.  Warm-up skipped.
+The first board, 6d5120f, two runs of the Z3801A, the images in
+emulation.  Warm-up skipped.
 
 | Check | Z3801A 3543 | Z3805A 3543B |
 |---|---|---|
