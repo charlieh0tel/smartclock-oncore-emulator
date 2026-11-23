@@ -1,0 +1,41 @@
+# The 58503A 3704, captured as 58503b.script, --model vp, its stored
+# position set to the recording's preset (the @@As).
+3 Ea 00
+3 Fa
+3 Cg 01
+4 Ea 01
+4 Cg 00
+4 Cj
+5 Ab 000000
+5 Ah 02
+5 Aj 00
+5 Ak 000a
+5 Al 003c
+5 An 01
+5 Ao 31
+5 Aq 01
+5 Ar 01
+5 Av 00
+5 Aw 00
+5 Ax 0000
+5 Ay 00000000
+5 AB 04
+5 AC 0078
+5 AD 0020
+5 Ba 00
+6 Ea 01
+6 Bb 01
+6 Bc 00
+6 Bk 00
+6 Ek 00
+6 Bn 0000000a0100000100000000000000
+6 Cg 01
+7 Aw 01
+9 Ag 0a
+11 Az 00000000
+13 Am 0000000000
+15 As 08025b04e5d275780000157c01
+15 At 01
+16 En 0101000a0100000100000000000000
+16 Cg 00
+16 Cg 01

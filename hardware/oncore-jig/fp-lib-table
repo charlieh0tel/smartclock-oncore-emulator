@@ -1,0 +1,17 @@
+(fp_lib_table
+	(version 7)
+	(lib
+		(name "oncore-emulator")
+		(type "KiCad")
+		(uri "${KIPRJMOD}/../oncore-emulator/oncore-emulator.pretty")
+		(options "")
+		(descr "The emulator's footprints")
+	)
+	(lib
+		(name "oncore-jig")
+		(type "KiCad")
+		(uri "${KIPRJMOD}/oncore-jig.pretty")
+		(options "")
+		(descr "The jig's footprints")
+	)
+)

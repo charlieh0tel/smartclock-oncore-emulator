@@ -1,0 +1,6 @@
+# The toolchain the firmware and its host crates are built and tested
+# with, for reproducible firmware builds.
+[toolchain]
+channel = "1.99.1"
+components = ["rustfmt", "clippy", "llvm-tools"]
+targets = ["thumbv6m-none-eabi"]

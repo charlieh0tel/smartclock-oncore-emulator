@@ -1,0 +1,27 @@
+# The crates that build on a host.  oncore-fw builds for the STM32
+# (thumbv6m-none-eabi, set in its .cargo/config.toml), so it stays out
+# with its own lockfile; it takes oncore-core and oncore-app by path.
+[workspace]
+members = ["oncore-core", "oncore-app", "oncore-host"]
+exclude = ["oncore-fw"]
+resolver = "3"
+
+[workspace.package]
+edition = "2024"
+license = "GPL-3.0-only"
+
+[workspace.lints.rust]
+missing_debug_implementations = "warn"
+unreachable_pub = "warn"
+unsafe_code = "deny"
+
+[workspace.lints.clippy]
+# A function's constants and items at its top, before its statements.
+items_after_statements = "warn"
+doc_markdown = "warn"
+enum_glob_use = "deny"
+# Nothing large on the stack (clippy.toml's thresholds).
+large_stack_arrays = "deny"
+large_types_passed_by_value = "deny"
+large_const_arrays = "deny"
+

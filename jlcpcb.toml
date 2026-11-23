@@ -1,0 +1,23 @@
+# The boards jlcpcb-release (hardware/ee_tooling) builds; the first is the
+# default.  Paths are from the repository root.
+
+[[board]]
+name = "oncore-emulator"
+directory = "hardware/oncore-emulator"
+copper = ["F.Cu", "In1.Cu", "In2.Cu", "B.Cu"]
+production = "production/oncore-emulator"
+sources = ["hardware/oncore-emulator/oncore-emulator.kicad_sym", "PLAN.md", "docs"]
+
+# It takes footprints and a symbol from the emulator's libraries.
+[[board]]
+name = "oncore-jig"
+directory = "hardware/oncore-jig"
+copper = ["F.Cu", "B.Cu"]
+production = "production/oncore-jig"
+sources = [
+    "hardware/oncore-emulator/oncore-emulator.pretty",
+    "hardware/oncore-emulator/oncore-emulator.3dshapes",
+    "hardware/oncore-emulator/oncore-emulator.kicad_sym",
+    "PLAN.md",
+    "docs",
+]

@@ -1,0 +1,30 @@
+(version 1)
+
+# Extra clearance around U1 (LEA-M8T) for reflow and any hand rework of its
+# castellated pads: from other exposed copper, pads and vias, not tracks
+# under solder mask.
+# Only against other parts and other nets: the module's own pads sit 0.3 mm
+# apart, and a ground via can sit close to a ground pad.
+(rule "GNSS module clearance"
+	(condition "A.memberOfFootprint('U1') && !B.memberOfFootprint('U1') && (B.Type == 'Pad' || B.Type == 'Via') && A.NetName != B.NetName")
+	(constraint clearance (min 0.4mm)))
+
+# The USB-C receptacle's face is flush with the edge, and its silk outline
+# runs just past it.  The silk-to-edge check gives no edge item to match, so
+# this also lifts J3's silk-to-silk clearance; keep references clear of it.
+(rule "USB-C at the edge"
+	(condition "A.memberOfFootprint('J3') || B.memberOfFootprint('J3')")
+	(constraint silk_clearance)
+	(severity ignore))
+
+# 3W from the RF trace (W = 0.36 mm) for the pour and every other net's
+# tracks and vias, so it stays a 50 ohm microstrip over layer 2, not coplanar
+# with the top pour.  Pads beside it (U1's ground pins, D7, J2) are where
+# they must be, and so are the ground vias placed on purpose: those pins'
+# stubs and the fence.  Top layer only: J2's pin goes through every layer,
+# and the inner planes must stay under the trace as it leaves the pin.
+(rule "RF 3W clearance"
+	(layer "F.Cu")
+	(condition "A.NetClass == '50Z_SE' && (B.Type == 'Zone' || (B.Type != 'Pad' && B.NetName != 'GND'))")
+	(constraint clearance (min 1.08mm)))
+

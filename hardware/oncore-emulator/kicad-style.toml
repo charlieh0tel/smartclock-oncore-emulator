@@ -1,0 +1,11 @@
+# kicad-style-check's waivers for this board (ee_tooling docs/kicad-style-check.md, Waivers).
+
+[[waiver]]
+rule = "supply-bypass"
+pin = "U4 pad 1"
+reason = "The USB feed (D8) reaches VIN past R14 and R16; the instrument's feed (J1 pin 2) goes through C1 first."
+
+[[waiver]]
+rule = "mounting-hole-no-net"
+reference = ["H1", "H2", "H3", "H4"]
+reason = "Mounting holes left on no net, by the owner's choice."

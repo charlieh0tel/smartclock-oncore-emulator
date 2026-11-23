@@ -1,0 +1,6 @@
+# The firmware's stack (AGENTS.md, Stack and RAM): the STM32C091 has 36 KB
+# of RAM for statics and stack together, so no large array goes on the
+# stack.  Bytes.  Frames are checked on the built firmware by `make
+# stack`: clippy's large_stack_frames estimates them before
+# optimization, several times too large.
+array-size-threshold = 512

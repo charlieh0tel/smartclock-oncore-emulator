@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coverage by instrument</title>
+<style>
+:root { --bg: #fbfbf9; --ink: #22231f; --muted: #6a6b63; --rule: #d6d5ce;
+  --yes: #dff3e6; --partial: #fbf0d3; --review: #e2e9f6; --no: #f1f0eb; color-scheme: light dark; }
+@media (prefers-color-scheme: dark) { :root { --bg: #171816; --ink: #e9e8e2;
+  --muted: #a3a299; --rule: #3b3c37; --yes: #1c3a28; --partial: #3d3418; --review: #1f2b40;
+  --no: #22231f; } }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, sans-serif;
+  max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+p, li { max-width: 75ch; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; font-size: 14px; }
+th, td { border: 1px solid var(--rule); padding: 6px 8px; text-align: left; vertical-align: top; }
+thead th { background: var(--no); }
+td.yes { background: var(--yes); }
+td.partial { background: var(--partial); }
+td.in-review { background: var(--review); }
+td.not-yet, td.not-planned { color: var(--muted); }
+.note { display: block; color: var(--muted); font-size: 12px; }
+a { color: inherit; }
+footer { color: var(--muted); font-size: 13px; margin-top: 24px; }
+</style>
+</head>
+<body>
+<h1>Coverage by instrument</h1>
+<p>Which instrument images the emulator has been run against, and how: a row per image, a column per way of running it or test. The against-the-image columns run the instrument&#x27;s image from power-on, without its 1 PPS input under test; the hardware columns run the instrument itself; the leap second columns run oncore-host&#x27;s test hooks against the image. A Yes, Partial or In review links to where the repository records it, and the generator checks that the section is there.</p>
+<div class="scroll">
+<table>
+<thead>
+<tr><th rowspan="2">Image</th><th colspan="3">Against the image</th><th colspan="2">Hardware</th><th colspan="2">Leap second</th></tr>
+<tr><th>oncore-host</th><th>NUCLEO</th><th>Board</th><th>oncore-host, instrument</th><th>Board in instrument</th><th>Leap second pending</th><th>Leap second crossing</th></tr>
+</thead>
+<tbody>
+<tr><th scope="row">58503A 3633</th><td class="not-yet"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#firmware">Not yet</a><span class="note">out of scope of the conformance test</span></td><td class="not-yet">Not yet</td><td class="not-yet"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#firmware">Not yet</a><span class="note">the switch to eight channels not run</span></td><td class="not-yet">Not yet</td><td class="not-yet">Not yet</td><td class="not-yet">Not yet</td><td class="not-yet">Not yet</td></tr>
+<tr><th scope="row">58503A 3704</th><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#firmware">Yes</a><span class="note">locked within 15 min, 2026-10-31</span></td><td class="not-yet">Not yet</td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/docs/emu-board-bring-up.md#the-58503a-3704-image">Yes</a><span class="note">locked at 142 s</span></td><td class="not-yet">Not yet</td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/docs/emu-board-bring-up.md#in-the-58503a">Yes</a><span class="note">locked at 13 min, then days against a CNS Clock II</span></td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#ut-plus">Yes</a><span class="note">reads @@Bj alone, booked for the quarter&#x27;s end, 2026-11-12</span></td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#ut-plus">Yes</a><span class="note">crossed with lock held, a second inserted, ACC +19, 2026-11-12</span></td></tr>
+<tr><th scope="row">58503B 1.01.04</th><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#ut-plus">Yes</a><span class="note">locked on the UT Plus path at 134 s, the VP path at 129 s, 2026-11-12</span></td><td class="not-yet">Not yet</td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/docs/emu-board-bring-up.md#every-image-2026-11-16">Yes</a><span class="note">locked on the UT Plus path at 129 s, the VP path at 140 s, six channels at 152 s, 2026-11-16</span></td><td class="not-yet">Not yet</td><td class="not-yet">Not yet</td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#ut-plus">Yes</a><span class="note">reads @@Bj alone, booked for the quarter&#x27;s end; on both paths, 2026-11-12</span></td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#ut-plus">Yes</a><span class="note">crossed with lock held on both paths; 23:59:60 read on the UT Plus path, ACC +19, 2026-11-12</span></td></tr>
+<tr><th scope="row">Z3801A 3543</th><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#firmware">Yes</a><span class="note">locked within 15 min; holdover when the stream paused</span></td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#firmware">Yes</a><span class="note">locked, 2026-10-31</span></td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/docs/emu-board-bring-up.md#z3801a-and-z3805a-on-the-first-board">Yes</a><span class="note">locked at 276 s, 7 h</span></td><td class="not-yet"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#firmware">Not yet</a></td><td class="not-yet">Not yet</td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#ut-plus">Yes</a><span class="note">reads @@Bj alone, booked for the quarter&#x27;s end, 2026-11-12</span></td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#ut-plus">Yes</a><span class="note">crossed with lock held, GPS time unbroken, ACC +19; its screen still pending 10 min after, 2026-11-12</span></td></tr>
+<tr><th scope="row">Z3805A 3543B</th><td class="partial"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#firmware">Partial</a><span class="note">start-up, Tracking: 6, GPS Rcv OK; lock not run</span></td><td class="not-yet">Not yet</td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/docs/emu-board-bring-up.md#z3801a-and-z3805a-on-the-first-board">Yes</a><span class="note">locked at 342 s</span></td><td class="not-yet"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#firmware">Not yet</a></td><td class="not-yet">Not yet</td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#ut-plus">Yes</a><span class="note">reads @@Bj alone, booked for the quarter&#x27;s end, 2026-11-12</span></td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#ut-plus">Yes</a><span class="note">crossed with lock held, GPS time unbroken, ACC +19; its screen still pending 10 min after, 2026-11-12</span></td></tr>
+<tr><th scope="row">Z3815A 4010</th><td class="not-planned"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#firmware">Not planned</a><span class="note">a Furuno GT-74 on NMEA, not an Oncore</span></td><td class="not-planned">Not planned</td><td class="not-planned">Not planned</td><td class="not-planned">Not planned</td><td class="not-planned">Not planned</td><td class="not-planned">Not planned</td><td class="not-planned">Not planned</td></tr>
+<tr><th scope="row">Z3816A 4001</th><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#ut-plus">Yes</a><span class="note">locked on the UT Plus path at 138 s, the VP path at 144 s, 2026-11-12</span></td><td class="not-yet">Not yet</td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/docs/emu-board-bring-up.md#every-image-2026-11-16">Yes</a><span class="note">locked on the UT Plus path at 138 s, the VP path at 144 s, six channels at 156 s, 2026-11-16</span></td><td class="not-yet">Not yet</td><td class="not-yet">Not yet</td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#ut-plus">Yes</a><span class="note">reads @@Bj alone, booked for the quarter&#x27;s end; on both paths, 2026-11-12</span></td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/TODO.md#ut-plus">Yes</a><span class="note">crossed with lock held on both paths, GPS time unbroken, ACC +19, 2026-11-12</span></td></tr>
+<tr><th scope="row">Z3817A 3752</th><td class="not-yet">Not yet</td><td class="not-yet">Not yet</td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/docs/emu-board-bring-up.md#every-image-2026-11-16">Yes</a><span class="note">locked to TIMEREF2 at 862 s, 592 s of it the oven warm-up, 2026-11-16</span></td><td class="yes"><a href="https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/PLAN.md#firmware">Yes</a><span class="note">oncore-host&#x27;s z3817a preset: GPS reference valid, TFOM 3, FFOM 0, 2026-11-11</span></td><td class="not-yet">Not yet</td><td class="not-yet">Not yet</td><td class="not-yet">Not yet</td></tr>
+</tbody>
+</table>
+</div>
+<h2>Marks</h2>
+<ul><li><b>Yes</b>: run, and the instrument reached Locked to GPS (or qualified its GPS reference); in a leap second column, it read the leap second as the column says</li><li><b>Partial</b>: run, but not all the way: the note says how far</li><li><b>In review</b>: the code to run it is in an open pull request, not yet run</li><li><b>Not yet</b>: not run</li><li><b>Not planned</b>: will not be run</li></ul>
+<h2>The columns</h2>
+<ul><li><b>oncore-host</b>: oncore-host on a PC, a u-blox through gpsd, against the instrument&#x27;s image.</li><li><b>NUCLEO</b>: The STM32 firmware on a NUCLEO-C092RC, against the image.</li><li><b>Board</b>: The emulator board on the jig, against the image.</li><li><b>oncore-host, instrument</b>: oncore-host on a PC feeding the instrument&#x27;s own GPS port.</li><li><b>Board in instrument</b>: The emulator board in the instrument in place of its VP Oncore.</li><li><b>Leap second pending</b>: oncore-host --leap-pending against the image: the image reports the scheduled leap second (:PTIM:LEAP:ACC?, :STAT?, :DATE?, :DUR? and its status screen).</li><li><b>Leap second crossing</b>: oncore-host --fake-time and --leap-pending against the image, across a quarter&#x27;s end: the image&#x27;s time and leap seconds through 23:59:60 and after.</li></ul>
+<footer>Generated by <code>firmware/tools/coverage.py</code> from <code>docs/coverage.json</code>.</footer>
+</body>
+</html>

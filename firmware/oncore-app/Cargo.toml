@@ -1,0 +1,21 @@
+[package]
+name = "oncore-app"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+embassy-futures = "0.1.2"
+embassy-time = "0.5.1"
+embedded-io-async = "0.7.0"
+oncore-core = { version = "0.1.0", path = "../oncore-core" }
+smartclock-gps = { git = "https://github.com/charlieh0tel/smartclock", tag = "v1.9.1", version = "1.9.1" }
+smartclock-gps-ublox = { git = "https://github.com/charlieh0tel/smartclock", tag = "v1.9.1", version = "1.9.1" }
+smartclock-ubx = { git = "https://github.com/charlieh0tel/smartclock", tag = "v1.9.1", version = "1.9.1" }
+
+[dev-dependencies]
+embassy-futures = "0.1.2"
+embassy-time = { version = "0.5.1", features = ["std", "generic-queue-32"] }
+
+[lints]
+workspace = true

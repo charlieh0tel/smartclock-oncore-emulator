@@ -1,0 +1,7 @@
+# Settings the SmartClock images set that oncore-core, the record's provider, does not act on, each excused by the project owner (smartclock-gps's Declaration::unacted; smartclockmon docs/firmware/gps.md, "The fields").  oncore-core's test holds that each setting the images set is one it acts on (record.rs, DECLARED) or one of its rows here, and that no row is for a setting it acts on or one no image sets.
+provider	setting	reason
+oncore-core	almanac_update	an output the engine sends from the record's almanac (@@An); nothing for the module to change
+oncore-core	atmospheric_correction	the LEA-M8T applies its own ionosphere and troposphere models, and no setting turns either off (UBX-13003221 R28, CFG-NAV5, CFG-NAVX5)
+oncore-core	epoch_offset	the LEA-M8T measures on GPS time's second (CFG-RATE) and takes no epoch offset
+oncore-core	correction_thresholds	the module takes no differential corrections, so has none to smooth
+oncore-core	output_format	the board speaks the binary protocol alone, not NMEA (@@Ci)

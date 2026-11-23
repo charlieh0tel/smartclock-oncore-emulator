@@ -1,0 +1,4 @@
+[submodule "hardware/ee_tooling"]
+	path = hardware/ee_tooling
+	url = https://github.com/charlieh0tel/ee_tooling.git
+	branch = main

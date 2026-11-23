@@ -1,0 +1,7 @@
+# kicad-style-check's waivers for this board (ee_tooling docs/kicad-style-check.md, Waivers).
+
+[[waiver]]
+rule = "trace-pad-to-pad"
+net = "GND"
+pads = ["J7 pad 3", "J8 pad 3"]
+reason = "GND return across the breakaway tab, beside +5V and 1PPS."

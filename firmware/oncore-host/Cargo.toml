@@ -1,0 +1,21 @@
+[package]
+name = "oncore-host"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+# move_trace is the other binary.
+default-run = "oncore-host"
+
+[dependencies]
+embassy-time = { version = "0.5.1", features = ["std", "generic-queue-32"] }
+embedded-io-async = { version = "0.7.0", features = ["std"] }
+oncore-app = { version = "0.1.0", path = "../oncore-app" }
+oncore-core = { version = "0.1.0", path = "../oncore-core" }
+smartclock-gps = { git = "https://github.com/charlieh0tel/smartclock", tag = "v1.9.1", version = "1.9.1" }
+smartclock-gps-ublox = { git = "https://github.com/charlieh0tel/smartclock", tag = "v1.9.1", version = "1.9.1" }
+smartclock-ubx = { git = "https://github.com/charlieh0tel/smartclock", tag = "v1.9.1", version = "1.9.1" }
+tokio = { version = "1.54.1", features = ["rt", "macros", "time", "io-util", "net", "sync"] }
+tokio-serial = "5.5.0"
+
+[lints]
+workspace = true

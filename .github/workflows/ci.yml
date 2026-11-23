@@ -1,0 +1,63 @@
+# The firmware's tests and `make lint` (formatting, clippy on every build, the tools'
+# checks, the stack-frame gate), as AGENTS.md has them run before each
+# commit, then `make images`: every run keeps the production images as an
+# artifact; a tag's run also publishes them as that tag's GitHub release.
+# The toolchain, its target and llvm-tools come from
+# firmware/rust-toolchain.toml.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  firmware:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          # The whole history and the tags, for `git describe` (the build
+          # identity and the images' names) and the build date.
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v6
+      - name: Toolchain
+        working-directory: firmware
+        run: rustup toolchain install
+      - name: Tests
+        working-directory: firmware
+        run: cargo test
+      - name: Lint
+        run: make lint
+      - name: Images
+        run: make images
+      - name: Keep the images
+        uses: actions/upload-artifact@v4
+        with:
+          name: oncore-fw-${{ github.sha }}
+          path: firmware/oncore-fw/target/images/
+          if-no-files-found: error
+
+  # Only this job can write, and it runs nothing from the repository or
+  # its dependencies: it publishes the images the build job kept.
+  release:
+    needs: firmware
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: oncore-fw-${{ github.sha }}
+          path: images
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --verify-tag
+          --title "$GITHUB_REF_NAME"
+          --notes "Firmware images built from $GITHUB_REF_NAME ($GITHUB_SHA); SHA256SUMS lists their hashes."
+          images/*

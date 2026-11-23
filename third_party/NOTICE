@@ -1,0 +1,518 @@
+Third-party material
+====================
+
+The documents in this directory are not part of this project, and the
+project's license does not apply to any of them.  Each document is the
+property of its copyright holder.  They are included for reference
+because they are the specification this project is written against.
+
+No license to any of this material is granted or implied by its
+presence here.
+
+Motorola / Synergy Systems
+--------------------------
+
+The entries below are copied from smartclockmon's third_party/NOTICE
+(github.com/charlieh0tel/smartclock), whose files these are, byte for
+byte (SHA-256 below).
+
+In `motorola/`.
+
+The GPS receiver inside these instruments is a Motorola Oncore, and
+the interval the instrument measures has that receiver's 1 PPS at one
+end of it, so its message set is as much a part of the specification
+as the SCPI manuals.
+
+  VPCommands.pdf             "VP Oncore Command Reference", Synergy
+                             Systems, LLC, October 2001.  Compiled and
+                             audited against Motorola's Technical
+                             Reference Manual TRM0001 version 7.0 of
+                             May 1996, and covering the 6 channel
+                             PVT-6 and Basic Oncore and the 6 and 8
+                             channel VP Oncore.  The Time RAIM setup
+                             and status messages it documents, @@Bn
+                             for six channels and @@En for eight, are
+                             what carry the negative sawtooth residual.
+                             SHA-256 11158c0d0f1a2f37f160d69748e875f4e496b4e245405a949dcfcf1b1fefc102.
+  vponcoreengnotesarchive.pdf
+                             "VP Oncore Engineering Notes", Motorola
+                             Position and Navigation Systems Business,
+                             revision 1.0, August 1996, as archived by
+                             Synergy Systems, LLC in July 2002.
+                             Specifications, power, antenna, RTC, 1 PPS
+                             signal definition and serial interface for
+                             the VP Oncore.
+                             SHA-256 4c9f3e505e26ab9aeb85f81f595f5bf08d6e908926e2d36e385d3738bfadaf19.
+  oncore-ut-users-guide/     "Oncore User's Guide", Motorola TRM0003,
+                             revision 3.2, June 1998, the whole
+                             manual, one PDF a part: toc.pdf,
+                             quikstrt.pdf, ch1.pdf to ch7.pdf and
+                             appndx.pdf, as TAPR serves them in
+                             web.tapr.org/tech_docs/GPS/motorola/
+                             oncoreut_manual.zip, SHA-256
+                             5dcb65725711c75c182a9b48984ae0cfadb7052d3dcc165eb6bd5398877cef2a.
+                             The UT and GT Oncore's reference:
+                             chapter 6 gives each binary message, the
+                             UT Plus's @@Bo (pp. 6.80-6.81) and @@Cj
+                             (pp. 6.40-6.41) among them.
+                             Each part:
+                               toc.pdf      b770486fc1362f5b19263c29d41590ed0dd31984738c11bf1acb37f563aa9bbb
+                               quikstrt.pdf 0ee7ba58bebc3ebe8c2482a6ca37807af867be80470888c3c417d165436f0008
+                               ch1.pdf      f6ff044b6b1ce0892553f79d5cff66493a2ac98ed6cd15899d64cdda7568b585
+                               ch2.pdf      6e5fff0da2f45e0dc6b275f8282ae98953710e7f173b3428fec2fd103a3809f3
+                               ch3.pdf      88e773e7a6ef78a8fdee5ee8bf3a325ab71d14a3585466151f3a399aa526526c
+                               ch4.pdf      ad60c86ca49a43335595d4fdf564f82382f8212a16f9946c0a405480771c8dc9
+                               ch5.pdf      4278a74035c6fca8a33c44e9331bd55b83aa0995364b89464479b3dbc3b4c493
+                               ch6.pdf      8da2d21758deb71a7cfd7ec835e5d0504d7cb9a20ae8205c3dd04dc212594dba
+                               ch7.pdf      367e69b7d0ffe1a1c4584c24d57b4d420ca8a31c29cb81b5920d29bae5e168ea
+                               appndx.pdf   1bea3b51fbe12880d29b607218cf3f39179ee7e821dcea08e17b370be1b54a17
+  ut-engg-notes.pdf          "Oncore Engineering Note: UT Plus
+                             Oncore", Motorola, revision 1.0, March
+                             2000.  Mechanical, electrical and 1 PPS
+                             detail for the UT+.
+                             SHA-256 699563b5310364d475a2f5a0be16c3f3efcf2ee0acb0dfe4158c804553e79da1.
+  m12plus-users-guide.pdf    "M12+ User's Guide", Motorola GPS
+                             Products, revision 6.X, 9 February 2005,
+                             prepared by Synergy Systems, LLC, as
+                             ncedc.org serves it in ftp/outgoing/doug/
+                             m12+userguide.pdf.  The M12+'s binary
+                             messages; the source for the UT Plus 3.x's
+                             @@Gj, leap second pending (pp. 152-153,
+                             21 bytes), which TRM0003 rev 3.2 predates.
+                             SHA-256 385b402fc64037aee4314ca72697dbe114f9270f4eea293563326f3f225abc41.
+
+In `synergy/` here (`motorola/` in smartclockmon).
+
+  SSR-VP-UT-and-GT-Drop-In-ReplacementsTN484-D-031925.pdf
+                             Synergy Systems, LLC tech note #484-D,
+                             revised January 2025.  Present-day u-blox
+                             based drop-in replacements for the VP, UT+
+                             and GT+ Oncore, which do not suffer the
+                             1024 week rollover these instruments do.
+                             SHA-256 41ee7fab97ba9b8888f95c8fe253ab4a1fa8f7500003938461fbd70c77d8973d.
+  SSR-M8T++ VP UT+ Drop-In Replacements TN 502-C.pdf
+                             Synergy Systems, LLC tech note #502-C,
+                             updated 6 April 2026.  The SSR-M8T++, a
+                             u-blox M8T based drop-in replacement for
+                             the 6 and 8 channel VP, the UT+ and the GT+
+                             Oncore.
+                             SHA-256 f28296d77c3ea9f9b13e8e813c28d08c72965fb58917787cdba74cdbf2e1c86f.
+
+STMicroelectronics
+------------------
+
+In `st/`.  The parts considered for U2, pin-compatible with the
+STM32C011F6 in TSSOP20 (TODO.md, "Board update").
+
+  DS_stm32c091fc.pdf         "STM32C091xB/xC STM32C092xB/xC",
+                             datasheet DS14720 Rev 3, March 2026, from
+                             st.com.  U2's replacement: TSSOP20 pinout
+                             (Figure 3), alternate functions, the
+                             PA11/PA12 remap.
+                             SHA-256 1be32e83660766462c14b32699c5231fe834ceab6f638b09538568a4afea244b.
+  DS_stm32c071g8.pdf         "STM32C071x8/xB", datasheet DS14693
+                             Rev 2, April 2025, from st.com.  The
+                             STM32C071's TSSOP20 pinouts, the `FxP` and
+                             the `N` versions.
+                             SHA-256 143ef3551f99ae754d59cb54376509ad6efe6dd649dcc86d60896ddd23daeb8b.
+  DS_stm32c011f6.pdf         "STM32C011x4/x6", datasheet DS13866 Rev 5,
+                             from st.com.  U2 in the design files; the
+                             order fitted the STM32C091FCP6
+                             (DS_stm32c091fc.pdf).
+                             SHA-256 e392b1542086b25f6bcb8856b6c0467aa3ec10e31f03bdafca74796485c531fe.
+  rm0490-stm32c0-series-advanced-armbased-32bit-mcus-stmicroelectronics.pdf
+                             "STM32C0 series advanced Arm-based 32-bit
+                             MCUs", reference manual RM0490 Rev 6, from
+                             st.com.  The peripherals the firmware
+                             drives.
+                             SHA-256 b5af48dcab379c8e581a4c66ab08f5176312da4db8d7f898caa5adccf4cfd170.
+  an2606-introduction-to-system-memory-boot-mode-on-stm32-mcus-stmicroelectronics.pdf
+                             "Introduction to system memory boot mode on
+                             STM32 MCUs", application note AN2606 Rev
+                             70, from st.com.  The ROM bootloader
+                             `bench/stm32boot.py` talks to.
+                             SHA-256 25b466e39ecc61671dcb988d8ca538462d6452d85f68140cb981ed728f57e654.
+  an5673-getting-started-with-stm32c0-mcu-hardware-development-stmicroelectronics.pdf
+                             "Getting started with STM32C0 MCU hardware
+                             development", application note AN5673 Rev
+                             3, June 2024, from st.com.  Supply,
+                             decoupling, reset and boot pins.
+                             SHA-256 74bd0faee51c6abc77b25c7416559e80de73e2f17929fa80f3984ffb1a7c631a.
+  DS_usblc6-2.pdf            "USBLC6-2", datasheet DS4260 Rev 7,
+                             December 2021, from st.com.  U8 on the
+                             board, U1 on the jig: USB ESD protection.
+                             SHA-256 bc30154f310cd631043214ed52571daefe04270587ec55072d49a23bd18b9068.
+
+u-blox
+------
+
+In `u-blox/`, from u-blox.com.  U1, the LEA-M8T (PLAN.md, "Choosing
+the module"; `docs/ublox-lea-m8t-version.md`), its protocol and
+design notes, and the modules considered in its place.
+
+  NEO-LEA-M8T-FW3_DataSheet_UBX-15025193.pdf
+                             "NEO/LEA-M8T u-blox M8 concurrent GNSS
+                             timing modules", data sheet UBX-15025193
+                             R10, 30 September 2025.  U1's pin
+                             assignment, electrical figures, V_ANT,
+                             type numbers and firmware.
+                             SHA-256 5f9ae3a8174faa6c53df2cac7ba989004f43d65a6b74c35db0c2af7d91a2c8f1.
+  LEA-M8S-M8T-FW3_HIM_UBX-15030060.pdf
+                             "LEA-M8S / LEA-M8T u-blox M8 concurrent
+                             GNSS modules", hardware integration manual
+                             UBX-15030060 R07, 18 January 2023.  U1's
+                             reference design: supply, backup, antenna
+                             bias and supervision, USB.
+                             SHA-256 a4444e46b789754fb20294495b63c4280d8df760f4940740c4fa1f476cd5be1c.
+  LEA-M8T-1-TIM112_PCN_UBX-23001089.pdf
+                             "LEA-M8T-1 FW update", product change note
+                             UBX-23001089, 23 March 2023.  TIM 1.12
+                             fixes a 500 ns 1 PPS jump below -30 C in
+                             TIM 1.11.
+                             SHA-256 466edc2650d89e6bfec612e630ff3f5a0576e431966f3b7497ae16be4daba3b0.
+  u-blox8-M8_ReceiverDescrProtSpec_UBX-13003221.pdf
+                             "u-blox 8 / u-blox M8 Receiver
+                             description, including protocol
+                             specification v15-20.30,22-23.01",
+                             UBX-13003221 R28, 30 January 2023.  The
+                             UBX messages the firmware sends and reads.
+                             SHA-256 241b6bce16f27fa754f3ef13a082ebf9a42e32ecf3ec9f3544df8a2c439702a2.
+  NEO-8Q-NEO-M8-FW3_HIM_UBX-15029985.pdf
+                             "NEO-8Q / NEO-M8 u-blox 8 / M8 GNSS
+                             modules", hardware integration manual
+                             UBX-15029985 R09, 2 June 2021.
+                             SHA-256 bc64bdee1d8022a44a8441141b625bbd6ec97d2caeec06623c40a03c383a763d.
+  GNSS-Antennas_AppNote_(UBX-15030289).pdf
+                             "GNSS antennas: RF design considerations
+                             for u-blox GNSS receivers", application
+                             note UBX-15030289 R03, 16 October 2019.
+                             SHA-256 0d6cf0a0f70c0aad258fa94199cff104a2ec005d06eca95b51c6e9ed7c6c3b1b.
+  PowerManagement_AppNote_(UBX-13005162).pdf
+                             "Power Management: considerations for
+                             u-blox 7 and M8 GNSS receivers",
+                             application note UBX-13005162 R01,
+                             20 February 2014.
+                             SHA-256 7f1afa4f272e5904edeab9b5c28031e1422a1c8f7657f6a76d908802a4d268bc.
+  ZED-F9T-20B_DataSheet_UBXDOC-963802114-12681_R04.pdf
+                             "ZED-F9T-20B High accuracy timing module",
+                             data sheet UBXDOC-963802114-12681 R04,
+                             28 May 2026.
+                             SHA-256 57361f9bde38d0eeee1bebd934c25c1f75ba31093a1e9f2c01ab46f09bee1bf9.
+  NEO-F10T_DataSheet_UBX-22022576_R06.pdf
+                             "NEO-F10T High precision timing GNSS
+                             module", data sheet UBX-22022576 R06,
+                             28 April 2026.
+                             SHA-256 f9ba775f5d7fddaa194060c633dac0118badc3357ac45a93135f386e54955ae7.
+  LEA-F9T-20B_DataSheet_UBX-22038377_R04.pdf
+                             "LEA-F9T-20B High accuracy timing
+                             module", data sheet UBX-22038377 R04,
+                             16 June 2025.  Pin assignment (Table 8),
+                             electrical figures, current consumption
+                             (Table 11).
+                             SHA-256 488e0d19364142b50b874a8f8694525123f3af7d36628493f7767eab4f30ad52.
+  LEA-F9T_IntegrationManual_UBX-20032109_R04.pdf
+                             "LEA-F9T High accuracy timing module
+                             Integration manual", UBX-20032109 R04,
+                             7 August 2025.  Legacy UBX-CFG
+                             compatibility (3.1.7), active antenna
+                             supply (4.4.1).
+                             SHA-256 b8ab8bb911d0650c6db9579339d13e24290f715d2e861c38b98854b1cd1ee9fc.
+
+U.S. Space Force
+----------------
+
+In `gps.gov/`.  Approved for public release, distribution unlimited.
+
+  IS-GPS-200N.pdf            "Navstar GPS Space Segment/Navigation User
+                             Segment Interfaces", IS-GPS-200 revision
+                             N, 01 August 2022, from gps.gov.  The L1
+                             C/A navigation message: subframes, the HOW's
+                             alert and anti-spoof flags, URA, health,
+                             ephemeris, almanac, and the satellite
+                             position and velocity algorithms.
+                             SHA-256 54ec544bfe7e6acd97daaa1de0ca248e5abec6b418f23c1a69991e5c7bcf749a.
+
+NOAA National Centers for Environmental Information
+---------------------------------------------------
+
+In `noaa/WMM2025COF/`, as NOAA distributes it: the World Magnetic Model
+2025, for `@@Bk`'s magnetic variation.
+
+  WMM.COF, WMM2025.COF       The coefficients, header "2025.0 WMM-2025
+                             11/13/2024"; the two files are the same.
+                             SHA-256 dfa8597825af4e0b87ff4198a5b4fb661b3c49f4cd090cd0164e0259b075582f.
+  WMM2025_TestValues.txt, WMM2025_TestValues.pdf
+                             NOAA's test values for checking an
+                             implementation.
+                             SHA-256 e6975b093dddeb6153e0b23cc418425c438167e7c5b1dd795da379cb654f5819 (txt),
+                             48bd057da0eb861d50f08c91aa8e8e70157b314ab974f02e25232156bae534bc (pdf).
+  README-WMM-COEFS.txt       NOAA's README for the package, December
+                             17, 2024.
+                             SHA-256 a1a00a3d3250f6bbcfb510db3b750c5dece8a6bd5455086ef542ea82b34fffec.
+
+Trimble Navigation
+------------------
+
+In `trimble/`.  The ThunderBolt GPS disciplined clock, a second 1 PPS
+reference beside the CNS Clock II (`docs/vp-on-jig.md`): its TSIP
+packets, settings and 1 PPS.
+
+  Thunderbolt_Users_Guide_2002-v4.pdf
+                             "ThunderBolt GPS Disciplined Clock User
+                             Guide", version 4.0, part number 35326-30,
+                             April 2002.
+                             SHA-256 bbc9e543307401ad586050c6f829c283544d9101800da51053ed77d6801cff50.
+  Thunderbolt-2003-11.pdf    The same guide, version 5.0, November
+                             2003.
+                             SHA-256 45c04756b534ce7c4ab573b1118c1018e89fc28587ee683fbd4c85e733677654.
+
+CNS Systems
+-----------
+
+In `cns/`.  CNS Clocks and the receivers in them, for the receiver
+delays, the sawtooth and how the CNS Clock II makes its 1 PPS in
+`docs/vp-on-jig.md`.
+
+  hambly-clark-m12plus-vs-usno-ptti-2002.pdf
+                             Richard M. Hambly (CNS Systems) and
+                             Thomas A. Clark (Syntonics), "Critical
+                             Evaluation of the Motorola M12+ GPS Timing
+                             Receiver vs. the Master Clock at the
+                             United States Naval Observatory,
+                             Washington DC", Proceedings of the 34th
+                             Annual Precise Time and Time Interval
+                             (PTTI) Systems and Applications Meeting,
+                             Reston, Virginia, December 3-5, 2002,
+                             pp. 109-115, as typeset.io serves it.
+                             The four M12+ receivers' 1 PPS before and
+                             after Motorola's calibration, their
+                             spread, the sawtooth, and the test bed's
+                             delays (Figure 2).
+                             SHA-256 653583b2abd133c8392071c3ce97e78f19d1c8ac7b94c4b7dbf4b7ab2d49a0c5.
+
+  pazamickas-hambly-vlbi-time-frequency-tow-2023.pdf
+                             Katie Pazamickas (Peraton) and Richard
+                             Hambly (CNS Systems), "High-accuracy Time
+                             and Frequency in VLBI", seminar slides,
+                             IVS Technical Operations Workshop (TOW),
+                             April 2023.  Cited by slide number (the
+                             number printed on the slide, one less
+                             than the PDF page).  The CNS Clock II's
+                             1 PPS through a delay line (revisions A
+                             to K) and from a steered OCXO (from
+                             revision L), its internal receiver delay
+                             by serial range, and receivers'
+                             quantization.
+                             SHA-256 08bb58ba38b9d2651eb0e2e88fbd6807660f0d895dfaa66c1085850925529fa1.
+
+  cns-clock-ii-manual-2024.pdf
+                             CNS Systems, "CNS Clock II and Tac32Plus:
+                             Installation and Operation", 2024, as
+                             gpstime.com serves it
+                             (wp-content/uploads/2025/03/
+                             CnsClockIIManual.pdf).  Its internal
+                             receiver delay by revision and serial
+                             range, p. 124.
+                             SHA-256 789b12046adc2cd88c2174623d88e185dd8c3dc5eafdbebbc7f0dea775442964.
+
+  clark-hambly-timing-for-vlbi-tow-2003.pdf
+                             Tom Clark, with Rick Hambly (CNS Systems),
+                             "Timing for VLBI", IVS Technical
+                             Operations Workshop, 2003, as
+                             ivscc.gsfc.nasa.gov serves it
+                             (meetings/tow2003/timing2003.pdf).  Cited
+                             by PDF page: the Oncore firmware's "DC"
+                             offsets (12) and the M12+ units against
+                             USNO (14).
+                             SHA-256 7ad9c4676ec861f265a46c3306a94176c378f5db1ee69919e3e4f01f8f42254e.
+
+  clark-hambly-its-about-time-tow-2009.pdf
+                             Tom Clark and Rick Hambly, "It's About
+                             Time", IVS Technical Operations Workshop,
+                             Haystack, April 2009, as ivscc.gsfc.nasa.gov
+                             serves it (meetings/tow2009/Clark.Sem.pdf).
+                             Two slides to a page; cited by the number
+                             printed on the slide.  The i-Lotus M12M's
+                             bias against CNS's reference receiver.
+                             SHA-256 42edb4aa1e8adea279c8e22f6460036fc3509ce26903d15ee21c6ee5cbe21685.
+
+  hambly-clark-gps-timing-tow-2011.pdf
+                             Rick Hambly and Tom Clark, "Low Cost, High
+                             Accuracy GPS Timing" (its first slide
+                             "It's About Time", subtitled "Timing for
+                             VLBI"), IVS Technical Operations Workshop,
+                             Haystack, May 2011, as ivscc.gsfc.nasa.gov
+                             serves it (meetings/tow2011/
+                             Hambly.Sem.pdf).  Cited by the number
+                             printed on the slide, one less than the PDF
+                             page.  The CNS Clock II's delay line and
+                             its bias, and the M12+ calibration at USNO.
+                             SHA-256 7e70e35c5fb5540301587aea51b0a0de5504d6b9c915acb0bcb183252aacf157.
+
+BAT Wireless
+------------
+
+In `bat-wireless/`, from the maker.
+
+  BWMCX-KWE.pdf              "MCX Antenna Connector", BWMCX-KWE data
+                             sheet.  J2, the antenna jack.
+                             SHA-256 8580a63a1460eb06bd4d0463bda9a963f280d3ba3c4605a2ffb43c6d2aa6fd0b.
+
+Diodes Incorporated
+-------------------
+
+In `diodes/`, from diodes.com.
+
+  AP2112.pdf                 "AP2112 600mA CMOS LDO regulator with
+                             enable", DS39724 Rev. 2-2.  U4 and U10, the
+                             3.3 V regulators.
+                             SHA-256 ef8d376f2ec356e29172eb9e053819a0ebdcc576dba7fc9ab0505c568427920f.
+
+HJ Tech
+-------
+
+In `hj-tech/`, from the maker.
+
+  HJ-MCX016.pdf              HJ-MCX016 MCX jack drawing.  With the
+                             BWMCX- KWE drawing, the source of J2's 3D
+                             model (`hardware/oncore-emulator/oncore-
+                             emulator.3dshapes/README.md`).
+                             SHA-256 40cd83c64a5aa83c22b9b85acce31aac27f455c8c92d5c93d773345d21c4351a.
+
+HRO (Korean Hroparts Elec)
+--------------------------
+
+In `hro/`, from the maker.
+
+  TYPE-C-31-M-12.pdf         TYPE-C-31-M-12 USB-C receptacle drawing.
+                             J3 on the board, J1 on the jig.
+                             SHA-256 6ae33d50ac47820114661138dc4e4659f40fdc5d4f485b46685dfec338da1a9e.
+
+JSCJ (Jiangsu Changjiang Electronics Technology)
+------------------------------------------------
+
+In `jscj/`, from the maker.
+
+  B5817W-B5819W.pdf          "B5817W-5819W Schottky barrier diode",
+                             SOD-123.  D8.
+                             SHA-256 1a0fd53a8ed6c62591a3983fd4c29b607975d30ba96c9381679109461399d442.
+
+Kento (Hubei Kuangtong Electronics)
+-----------------------------------
+
+In `kento/`, from the maker: 0603 LED specifications for approval.
+
+  KT-0603B.pdf               KT-0603B, blue.  D6 on the board.
+                             SHA-256 02c15544e1aa1c636eea10b988a48a5dd5c75193570cbaf221f4db89781598d2.
+  KT-0603R.pdf               KT-0603R, red.  D4 and D5 on the board, D1
+                             on the jig.
+                             SHA-256 a3bac1cc9c59cb306ad03512945cce12c87bb54252abc223b796e1d20d41d4a1.
+  KT-0603YG.pdf              KT-0603YG, yellow-green.  D2 on the board.
+                             SHA-256 867413c6866252ed5bfb4c73d17d4ded19a1e0c63ef7a565f824afe39a22654b.
+
+Keystone Electronics
+--------------------
+
+In `keystone/`, from keyelco.com.
+
+  5015-5019-surface-mount-test-points.pdf
+                             Keystone catalog M65, p. 55: SMT test
+                             points 5015 to 5019.  TP2 (5019, not
+                             fitted).
+                             SHA-256 ef1bf216e240986f5717bcd71309afdf5689f1eda962462b2b44cae4c8dae060.
+
+Maxim Integrated
+----------------
+
+In `maxim/`, from maximintegrated.com.
+
+  DS1023.pdf                 "DS1023 8-Bit Programmable Timing Element".
+                             Not used on the board.
+                             SHA-256 8de9c6821786551a6e04dbebe8ad5b893e5917525d8347edd1540006a0709c8d.
+
+Murata
+------
+
+In `murata/`, from murata.com.
+
+  LQW18AN_80.pdf             "Chip coils (chip inductors) LQW18AN_80
+                             reference specification",
+                             JELF243A_0102J-01.  L1, LQW18AN27NG80D, in
+                             the antenna bias.
+                             SHA-256 eba33902037c32ce84fd0d883bccc8f4a0df426af6663357a882bc0b4e62df5c.
+
+Nexperia
+--------
+
+In `nexperia/`, from nexperia.com.
+
+  BAT54J.pdf                 "BAT54J Schottky barrier single diode",
+                             product data sheet, 1 October 2022.  D3
+                             (not fitted).
+                             SHA-256 3b0a7ee6b68b5f3b95b2fe0a9fb22ed9e02b62e01dc23970c6ce9e699ba5cc86.
+  PESD5V0F1BL.pdf            "PESD5V0F1BL Femtofarad bidirectional ESD
+                             protection diode", product data sheet, 14
+                             April 2023.  D7, on the antenna input.
+                             SHA-256 bd25aba5efa70c41c9f0e0868166498b16d79a935a54243e73389466493f4338.
+
+onsemi
+------
+
+In `onsemi/`, from onsemi.com.
+
+  BSS138-D.pdf               "BSS138 N-Channel Logic Level Enhancement
+                             Mode Field Effect Transistor", BSS138/D
+                             Rev. 7, April 2024.  Q1.
+                             SHA-256 ba7a267f5eebb2cb32333517a387df863bb2137fa8799787d2204fc12c68c291.
+
+Panasonic
+---------
+
+In `panasonic/`, from industry.panasonic.com.
+
+  ERJ-P.pdf                  "Anti-Surge Thick Film Chip Resistors ERJ
+                             P, PA, PM type".  R1, ERJ-P06F10R0V, the
+                             antenna bias resistor (PLAN.md).
+                             SHA-256 441511405b9820335bacd22e1744af202b366ea162611ad8e03f7cdc1dcb6c3c.
+
+Seiko Instruments
+-----------------
+
+In `seiko/`, from the maker.
+
+  MS621FE-FL11E_spec.pdf     "MS Lithium Rechargeable Battery MS621FE
+                             FL11E" product specifications, STDE-B-
+                             MS0621E-5ATFL11E-0014-1.  BT1, U1's backup
+                             (not fitted).
+                             SHA-256 551d510d78d08e5882b7b257cd22d20c44546f438f8017ddac8f755107da6d48.
+
+Texas Instruments
+-----------------
+
+In `ti/`, from ti.com.
+
+  sn74ahct1g126.pdf          "SN74AHCT1G126 Single Bus Buffer Gate With
+                             3-State Output", SCLS380L, revised March
+                             2024.  U3 and U6 on the board, U4 on the
+                             jig: the 1 PPS drivers.
+                             SHA-256 dd59e32da9012c147553f13b655de89d5a19218c2e11db8e4bf0934c363385e5.
+  sn74lvc1g34.pdf            "SN74LVC1G34 Single Buffer Gate", SCES519O,
+                             revised October 2025.  U7.
+                             SHA-256 04384d3a3cf65b2b3f83cc2d04c19b660c3d6a423af6a863e8de3ddf45ccecb3.
+  tps2553.pdf                "TPS255xx Precision Adjustable Current-
+                             Limited Power-Distribution Switches",
+                             SLVS841F, revised August 2016.  Considered
+                             for the antenna current limit and dropped
+                             (PLAN.md).
+                             SHA-256 88e453700cea2b263cdb5b44fce1e883e0f6d3b975457f879ac1423eeea42071.
+
+Würth Elektronik
+----------------
+
+In `wurth/`, from we-online.com.
+
+  60612202111309.pdf         WR-MCX 60612202111309 edge-launch jack
+                             drawing.  J2's former part, no longer used;
+                             its symbol and footprint remain in the
+                             design files.
+                             SHA-256 a21e59366cb9eacc459b2e96b477f0a8d0538de918901be94c7498d22ae0d11b.

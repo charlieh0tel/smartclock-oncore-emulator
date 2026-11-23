@@ -1,0 +1,25 @@
+# The hardware tools' environment: jlcpcb-release, from the ee_tooling
+# submodule, and stand_in_models.py.
+[project]
+name = "oncore-emulator-hardware"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = ["ee-tooling", "mypy==2.4.0", "pytest==9.2.0", "ruff==0.17.0"]
+
+[tool.uv.sources]
+ee-tooling = { path = "ee_tooling", editable = true }
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["ee_tooling"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "ANN", "RUF"]
+
+[tool.mypy]
+strict = true
+files = ["stand_in_models.py", "test_stand_in_models.py"]

@@ -1,0 +1,10 @@
+(fp_lib_table
+	(version 7)
+	(lib
+		(name "oncore-emulator")
+		(type "KiCad")
+		(uri "${KIPRJMOD}/oncore-emulator.pretty")
+		(options "")
+		(descr "Project footprints")
+	)
+)
