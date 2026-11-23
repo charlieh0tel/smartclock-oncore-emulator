@@ -22,7 +22,7 @@ class Coverage(unittest.TestCase):
 
     def test_a_claim_needs_its_record(self) -> None:
         data = copy.deepcopy(table())
-        cell = data["rows"][0]["cells"]["nucleo_image"]
+        cell = data["rows"][0]["cells"]["host_hw"]
         cell["status"] = "yes"
         self.assertEqual(len(problems(data)), 1)
 
