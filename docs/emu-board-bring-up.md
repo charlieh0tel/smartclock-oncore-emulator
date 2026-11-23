@@ -75,8 +75,8 @@ One frame failed its checksum in that run; which one was not recorded.
 
 ## The 58503A 3704 image
 
-The 58503A 3704 image with the 58503A 3710A01056's EEPROM, from
-power-on, its GPS port on the board on the jig at 9600.  The board's
+The 58503A 3704 image in emulation, with the 58503A 3710A01056's
+EEPROM, from power-on, its GPS port on the board on the jig at 9600.  The board's
 1 PPS is not tested here.  The OCXO warm-up was skipped.
 
 From power-on, the board read first over the jig: B1121P1114, software
@@ -164,7 +164,7 @@ SSG0163878, within 0.2 dB across satellites.
 
 ## 58503B 1.01.04
 
-The 58503B 1.01.04 image with an erased EEPROM, on the second board with the production build of d81fd8b, which answers `@@Ta`.
+The 58503B 1.01.04 image in emulation, with an erased EEPROM, on the second board with the production build of d81fd8b, which answers `@@Ta`.
 Warm-up skipped.  1 PPS as above.
 
 | Check | Result |
@@ -181,7 +181,7 @@ Warm-up skipped.  1 PPS as above.
 
 ## Z3816A 4001
 
-The Z3816A 4001 image with a synthetic EEPROM and its time code off, on
+The Z3816A 4001 image in emulation, with a synthetic EEPROM and its time code off, on
 the second board with the production build of 02f0c2b.  Warm-up skipped.  1 PPS as above.
 
 | Check | Result |
@@ -196,7 +196,8 @@ the second board with the production build of 02f0c2b.  Warm-up skipped.  1 PPS 
 
 ## Every image, 2026-11-16
 
-Every image on each build it can meet, on the second board on the jig
+Every image in emulation, on each build it can meet, on the second
+board on the jig
 (the jig's LEA-M8T, live sky), 095ad35 with smartclock-gps cb968ece.
 Each cell: the build flashed over SWD, the image from power-on with its
 warm-up skipped and a fresh copy of its EEPROM, lock, 15 minutes locked
@@ -227,7 +228,8 @@ at power-on it went to TIMEREF2 at once.
 
 ## Z3801A and Z3805A on the first board
 
-The first board, 6d5120f, two runs of the Z3801A.  Warm-up skipped.
+The first board, 6d5120f, two runs of the Z3801A, the images in
+emulation.  Warm-up skipped.
 
 | Check | Z3801A 3543 | Z3805A 3543B |
 |---|---|---|
@@ -355,8 +357,7 @@ judge.
 ### 2026-11-22, fw-v1.0.0
 
 Board 0001 with fw-v1.0.0 (fe3802acd01d, `vp`), the release image
-from CI, in the 58503A; the 58503A with a "new" OCXO (05071-60219), its
-coarse adjustment not trimmed.  The CNS at `@@Ay` 999 999 000 ns (its
+from CI, in the 58503A.  The CNS at `@@Ay` 999 999 000 ns (its
 pulse 1 us early) and `@@Az` 48 ns.  The 53230A: CNS rear on channel
 1 at 1.88 V, the 58503A on channel 2 at 1.43 V, 1 MOhm, DC.  The
 58503A's status read once a second by its own monitor, not by the
@@ -373,10 +374,14 @@ board.
 | Locked, 02:31 to 18:19 | no alarm, holdover or logged error; tracking 6 to 8 |
 | The 58503A's own TI, hourly means, 03:00 to 12:00 | -94 to +53 ns: a damped swing after pull-in |
 | Its own TI, 13:00 to 18:19 | hourly means +10 to +23 ns; -14 to +38 ns |
-| The same, the old OCXO with board 0005, 11-19 to 11-20 | hourly means -411 to +377 ns; -610 to +708 ns |
 | EFC | 40.1 % at lock to 36.0 %, 0.5 %/h falling to 0.13 %/h |
 | The counter less 1 us less its own reading, hourly | 46.0 to 48.0 ns medians, 1.6 to 2.8 ns sd (about 47 ns with board 0005, 11-19) |
 | Board 0005 on the jig less the CNS, qErr out, 52,279 s | 1034.4 ns median, 1.40 ns spread (6.18 raw); r -0.974 with qErr |
+
+The 58503A's own status from lock, as its monitor read it each second
+(one-minute means; shaded, the window below):
+
+![The 58503A's own time interval, EFC, satellites, temperature, TFOM and FFOM, and predicted holdover, 02:31 to 20:05 UTC on 2026-11-22](images/58503a-own-status.png)
 
 Stability, 14:05 to 20:05 (21,600 s without a gap, the 58503A's loop
 settled; `pps_compare.py series` and `stats`, tau0 = 1 s), each pulse

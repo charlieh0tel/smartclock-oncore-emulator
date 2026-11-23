@@ -39,10 +39,10 @@
   image, 2026-11-16").
   The Z3815A 4010 uses a Furuno GT-74 on NMEA, not an Oncore: out of
   scope.
-- The switch to eight channels on `@@Ea`, against the images: passed from power-on on the board, 58503A 3704
+- The switch to eight channels on `@@Ea`, against the images in emulation: passed from power-on on the board, 58503A 3704
   at 8 with its master reset, the Z3801A and Z3805A at 6
   (`docs/emu-board-bring-up.md`).  The 58503A 3633 not run.
-- A conformance test against the images: first `oncore-host --oncore
+- A conformance test against the images in emulation: first `oncore-host --oncore
   tcp:` (the protocol, init and `:SYSTem:STATus?`'s `Tracking: N`; no
   1 PPS over TCP), passed from boot on 2026-10-30 by the Z3805A 3543B,
   Z3801A 3543 (`Tracking: 6`) and 58503A 3704 (the B4121P1115 then
@@ -84,7 +84,7 @@ board (a `ut-plus` feature) and by `oncore-host --model ut-plus`.
   formats by inference; `@@Bb` with more than six satellites (a Synergy
   note says the UT Plus sends it several times); whether `@@Ea`'s
   signal byte is C/N0 itself.
-- A leap second scheduled in the engine's reports, against the images, 2026-11-12:
+- A leap second scheduled in the engine's reports, against the images in emulation, 2026-11-12:
   the 58503B and Z3816A on both paths, the 58503A 3704, Z3801A and
   Z3805A.  Every image reads `@@Bj` alone and books the leap second at
   the end of the current quarter, whatever the day.  With
@@ -118,7 +118,7 @@ board (a `ut-plus` feature) and by `oncore-host --model ut-plus`.
 - `@@Gj`: the images query it only from the pForth console
   (`gps_query_all`, `55 gps_query`; smartclock's reading); both took the
   21-byte reply, no leap scheduled.
-- Tested against the images (oncore-host, a gpsd source, 2026-11-12):
+- Tested against the images in emulation (oncore-host, a gpsd source, 2026-11-12):
   the 58503B on the UT Plus path locked at 134 s, on the VP path at
   129 s; the Z3816A at 138 s and 144 s; every command answered.  Next:
   the board's `ut-plus` build on the jig.
