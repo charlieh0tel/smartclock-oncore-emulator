@@ -24,7 +24,8 @@ and no others (`docs/oncore-messages.md`).
   ([coverage](https://charlieh0tel.github.io/smartclock-oncore-emulator/coverage.html),
   `docs/testing.md`).
 - In a 58503A, 16 hours locked with no alarm, its 1 PPS checked
-  against a CNS Clock II (`docs/emu-board-bring-up.md`).
+  against a CNS Clock II (`docs/emu-board-bring-up.md`,
+  [charts](https://claude.ai/artifact/BKLhqv7PK5DPNSiXxLh1z2)).
 - Like a VP Oncore, it has a fixed bias against UTC, tens of
   nanoseconds, which each instrument can trim with
   `:DIAGnostic:TOFFset` (`docs/emu-board-bring-up.md`).
