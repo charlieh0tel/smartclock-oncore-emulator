@@ -194,9 +194,10 @@ of RAM between statics and one stack.
 
 ## GitHub
 
-- Link an HTML file in the repo from Markdown through
-  `https://htmlpreview.github.io/?` followed by its GitHub URL, so it
-  renders: `https://htmlpreview.github.io/?https://github.com/OWNER/REPO/blob/BRANCH/PATH.html`.
+- Link an HTML file in `docs/` from Markdown through GitHub Pages,
+  which serves `main`'s `docs/`, so it renders:
+  `https://charlieh0tel.github.io/smartclock-oncore-emulator/PATH.html`
+  (`PATH` under `docs/`).
 - Commit as you go.
 
 ## Working style

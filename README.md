@@ -20,7 +20,7 @@ and no others (`docs/oncore-messages.md`).
 - Firmware [fw-v1.0.0](https://github.com/charlieh0tel/smartclock-oncore-emulator/releases/tag/fw-v1.0.0):
   an image for each receiver model, with SHA256SUMS.
 - Every SmartClock image locks against the board on the test jig
-  ([coverage](https://htmlpreview.github.io/?https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/docs/coverage.html),
+  ([coverage](https://charlieh0tel.github.io/smartclock-oncore-emulator/coverage.html),
   `docs/testing.md`).
 - In a 58503A, 16 hours locked with no alarm, its 1 PPS checked
   against a CNS Clock II (`docs/emu-board-bring-up.md`).
