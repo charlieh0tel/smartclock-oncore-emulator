@@ -378,6 +378,11 @@ board.
 | The counter less 1 us less its own reading, hourly | 46.0 to 48.0 ns medians, 1.6 to 2.8 ns sd (about 47 ns with board 0005, 11-19) |
 | Board 0005 on the jig less the CNS, qErr out, 52,279 s | 1034.4 ns median, 1.40 ns spread (6.18 raw); r -0.974 with qErr |
 
+The 58503A's own status from lock, as its monitor read it each second
+(one-minute means; shaded, the window below):
+
+![The 58503A's own time interval, EFC, satellites, temperature, TFOM and FFOM, and predicted holdover, 02:31 to 20:05 UTC on 2026-11-22](images/58503a-own-status.png)
+
 Stability, 14:05 to 20:05 (21,600 s without a gap, the 58503A's loop
 settled; `pps_compare.py series` and `stats`, tau0 = 1 s), each pulse
 less the CNS (charts and tables:
