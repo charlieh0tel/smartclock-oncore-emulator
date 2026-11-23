@@ -50,7 +50,8 @@
   `Tracking: 8`) images, each with GPS Rcv OK (the 58503A 3633 is out
   of scope).  Then apu-0's NEO-M8T through gpsd brought the Z3801A 3543
   and 58503A 3704 images to "Locked to GPS" within 15 minutes
-  (2026-10-31), and the STM32 firmware on a NUCLEO-C092RC, the Z3801A
+  (2026-10-31), the Z3805A 3543B at 265 s from power-on, warm-up
+  skipped (2026-11-23), and the STM32 firmware on a NUCLEO-C092RC, the Z3801A
   3543 likewise; TI within a few ns at 45 minutes.  Holdover: with the
   module's stream paused, the Z3801A went to holdover within 2 minutes
   (2026-10-31).  Recovery and a reset mid-run are for the board, whose

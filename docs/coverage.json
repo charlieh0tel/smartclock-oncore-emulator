@@ -9,12 +9,6 @@
       "means": "oncore-host on a PC, a u-blox through gpsd, against the instrument's image."
     },
     {
-      "key": "nucleo_image",
-      "title": "NUCLEO",
-      "group": "Against the image",
-      "means": "The STM32 firmware on a NUCLEO-C092RC, against the image."
-    },
-    {
       "key": "board_image",
       "title": "Board",
       "group": "Against the image",
@@ -57,7 +51,6 @@
       "image": "58503A 3633",
       "cells": {
         "host_image": {"status": "not-yet", "note": "out of scope of the conformance test", "path": "TODO.md", "section": "Firmware"},
-        "nucleo_image": {"status": "not-yet"},
         "board_image": {"status": "not-yet", "note": "the switch to eight channels not run", "path": "TODO.md", "section": "Firmware"},
         "host_hw": {"status": "not-yet"},
         "board_hw": {"status": "not-yet"},
@@ -69,7 +62,6 @@
       "image": "58503A 3704",
       "cells": {
         "host_image": {"status": "yes", "note": "locked within 15 min, 2026-10-31", "path": "TODO.md", "section": "Firmware"},
-        "nucleo_image": {"status": "not-yet"},
         "board_image": {"status": "yes", "note": "locked at 142 s", "path": "docs/emu-board-bring-up.md", "section": "The 58503A 3704 image"},
         "host_hw": {"status": "not-yet"},
         "board_hw": {"status": "yes", "note": "locked at 13 min, then days against a CNS Clock II", "path": "docs/emu-board-bring-up.md", "section": "In the 58503A"},
@@ -81,7 +73,6 @@
       "image": "58503B 1.01.04",
       "cells": {
         "host_image": {"status": "yes", "note": "locked on the UT Plus path at 134 s, the VP path at 129 s, 2026-11-12", "path": "TODO.md", "section": "UT Plus"},
-        "nucleo_image": {"status": "not-yet"},
         "board_image": {"status": "yes", "note": "locked on the UT Plus path at 129 s, the VP path at 140 s, six channels at 152 s, 2026-11-16", "path": "docs/emu-board-bring-up.md", "section": "Every image, 2026-11-16"},
         "host_hw": {"status": "not-yet"},
         "board_hw": {"status": "not-yet"},
@@ -93,7 +84,6 @@
       "image": "Z3801A 3543",
       "cells": {
         "host_image": {"status": "yes", "note": "locked within 15 min; holdover when the stream paused", "path": "TODO.md", "section": "Firmware"},
-        "nucleo_image": {"status": "yes", "note": "locked, 2026-10-31", "path": "TODO.md", "section": "Firmware"},
         "board_image": {"status": "yes", "note": "locked at 276 s, 7 h", "path": "docs/emu-board-bring-up.md", "section": "Z3801A and Z3805A on the first board"},
         "host_hw": {"status": "not-yet", "path": "TODO.md", "section": "Firmware"},
         "board_hw": {"status": "not-yet"},
@@ -104,8 +94,7 @@
     {
       "image": "Z3805A 3543B",
       "cells": {
-        "host_image": {"status": "partial", "note": "start-up, Tracking: 6, GPS Rcv OK; lock not run", "path": "TODO.md", "section": "Firmware"},
-        "nucleo_image": {"status": "not-yet"},
+        "host_image": {"status": "yes", "note": "locked at 265 s, warm-up skipped, 2026-11-23", "path": "TODO.md", "section": "Firmware"},
         "board_image": {"status": "yes", "note": "locked at 342 s", "path": "docs/emu-board-bring-up.md", "section": "Z3801A and Z3805A on the first board"},
         "host_hw": {"status": "not-yet", "path": "TODO.md", "section": "Firmware"},
         "board_hw": {"status": "not-yet"},
@@ -117,7 +106,6 @@
       "image": "Z3815A 4010",
       "cells": {
         "host_image": {"status": "not-planned", "note": "a Furuno GT-74 on NMEA, not an Oncore", "path": "TODO.md", "section": "Firmware"},
-        "nucleo_image": {"status": "not-planned"},
         "board_image": {"status": "not-planned"},
         "host_hw": {"status": "not-planned"},
         "board_hw": {"status": "not-planned"},
@@ -129,7 +117,6 @@
       "image": "Z3816A 4001",
       "cells": {
         "host_image": {"status": "yes", "note": "locked on the UT Plus path at 138 s, the VP path at 144 s, 2026-11-12", "path": "TODO.md", "section": "UT Plus"},
-        "nucleo_image": {"status": "not-yet"},
         "board_image": {"status": "yes", "note": "locked on the UT Plus path at 138 s, the VP path at 144 s, six channels at 156 s, 2026-11-16", "path": "docs/emu-board-bring-up.md", "section": "Every image, 2026-11-16"},
         "host_hw": {"status": "not-yet"},
         "board_hw": {"status": "not-yet"},
@@ -141,7 +128,6 @@
       "image": "Z3817A 3752",
       "cells": {
         "host_image": {"status": "not-yet"},
-        "nucleo_image": {"status": "not-yet"},
         "board_image": {"status": "yes", "note": "locked to TIMEREF2 at 862 s, 592 s of it the oven warm-up, 2026-11-16", "path": "docs/emu-board-bring-up.md", "section": "Every image, 2026-11-16"},
         "host_hw": {"status": "yes", "note": "oncore-host's z3817a preset: GPS reference valid, TFOM 3, FFOM 0, 2026-11-11", "path": "PLAN.md", "section": "Firmware"},
         "board_hw": {"status": "not-yet"},
