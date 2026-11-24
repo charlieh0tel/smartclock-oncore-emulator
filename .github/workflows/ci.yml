@@ -16,13 +16,13 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
           # The whole history and the tags, for `git describe` (the build
           # identity and the images' names) and the build date.
           fetch-depth: 0
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v7
       - name: Toolchain
         working-directory: firmware
         run: rustup toolchain install
@@ -34,7 +34,7 @@ jobs:
       - name: Images
         run: make images
       - name: Keep the images
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: oncore-fw-${{ github.sha }}
           path: firmware/oncore-fw/target/images/
@@ -49,7 +49,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: oncore-fw-${{ github.sha }}
           path: images
