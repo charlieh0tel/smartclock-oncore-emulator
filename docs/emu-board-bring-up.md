@@ -442,14 +442,35 @@ value; the aging model moves the -60 to -86 margin as much as the
 
 ### 2026-11-24, one start
 
-The CNS's front 1 PPS through a Y to both counters' channel 1, each
-leg 13 in longer than the stop cables (common to both counters), and
-on to the scope; the 58503A (board 0001) on the 53230A's channel 2,
-board 0005 on jig 0209 on the 53132A's, stop cables of equal length,
-antenna feeds nearly so.  Counters 1 MOhm, DC; the scope in 50 ohm.
-Levels at each edge's midpoint: CNS 1.883 V (5.6 ns 10-90% rise),
-58503A 1.397 V (18.4 ns), jig 1.243 V (3.5 ns).  TCO -60.  Logging
-from 01:36 UTC.
+The CNS's front 1 PPS through a tee to a tee at each counter's
+channel 1, equal legs 13 in longer than the stop cables; the 53230A's
+tee ends there, its channel 1 at 50 ohm, and the 53132A's goes on to
+the scope's 50 ohm, its channel 1 at 1 MOhm.  The 58503A (board 0001)
+on the 53230A's channel 2, board 0005 on jig 0209 on the 53132A's, 1
+MOhm, each on to the scope's 50 ohm; stop cables of equal length,
+antenna feeds nearly so.  DC.  Levels at each edge's midpoint: CNS
+1.498 V (3.7 ns 10-90% rise; a second step 15 ns later, the first
+tee's mismatch reflected off the CNS), 58503A 1.397 V (18.4 ns), jig
+1.243 V (3.5 ns).  TCO -60.  Counter less 1 us; the 58503A's less its
+own TI, 0005's less qErr; medians:
+
+| Window | 58503A | 0005 | 58503A - 0005 |
+| ------ | ------ | ---- | ------------- |
+| 03:16 to 06:16 (10,848 s) | 45.14 ns, 2.11 sd | 31.20 ns, 3.77 sd | 13.94 ns |
+| 01:36 to 03:14, the 53230A's tee open at 1 MOhm | 45.78 ns, 2.30 sd | 30.71 ns, 3.11 sd | 15.07 ns |
+| 11-23, separate starts: CNS rear (53230A), front (53132A) | 45.6 ns | 36.2 ns | 9.4 ns |
+
+Hourly medians 44.5 to 45.6 ns (58503A) and 30.7 to 32.2 ns (0005).
+The 58503A's edge takes about 9 ns from 10% to its midpoint.
+Stability, 03:16 to 06:16, each pulse less the CNS (charts and
+tables: <https://claude.ai/artifact/1JkEGwFnZU1W1Pq9Ko6imw>):
+
+| tau, s | 0005, qErr out, TDEV | 58503A TDEV | 0005 - 58503A TDEV |
+| ------ | -------------------- | ----------- | ------------------ |
+| 1 | 0.33 ns | 0.14 ns | 0.31 ns |
+| 10 | 0.99 ns | 0.89 ns | 0.44 ns |
+| 100 | 2.13 ns | 0.64 ns | 2.33 ns |
+| 1000 | 1.15 ns | 1.45 ns | 2.00 ns |
 
 ### Bias against UTC
 
@@ -471,3 +492,5 @@ trims it against a reference.
 - The 58503A with the board against a second reference (a Thunderbolt)
   on the jig's splitter port.
 - 0005's 1 s noise on the 53230A, to separate the 53132A's.
+- 0005's TDEV at 50 to 200 s on 11-24, about 2 ns (0.42 ns at 100 s
+  on 11-22).
