@@ -39,6 +39,10 @@
   image, 2026-11-16").
   The Z3815A 4010 uses a Furuno GT-74 on NMEA, not an Oncore: out of
   scope.
+- The 58503A 3704 on the board's `vp-six` build, in emulation: "Power-up:
+  GPS acquisition", `Tracking: 0`, no date in 10 min, twice on
+  2026-11-24 (board 0002), where it locked at 153 s on 2026-11-16
+  (`docs/testing.md`, "The date").
 - The switch to eight channels on `@@Ea`, against the images in emulation: passed from power-on on the board, 58503A 3704
   at 8 with its master reset, the Z3801A and Z3805A at 6
   (`docs/emu-board-bring-up.md`).  The 58503A 3633 not run.
