@@ -20,7 +20,7 @@ pending and across a quarter's end.
 | `oncore-app/tests/run.rs`, 10 | a receiver configured before power-up sending unasked, module set-up, a burst of instrument commands answered, the mask angle passed through, a module at 9600 saved, the bench reset, the bench knock for the bootloader, answering while the module is silent, the switch to eight channels, a silent module reset | yes |
 | `make lint` | every crate formatted (`oncore-fw` too), clippy on every firmware build, the stack-frame gate (`make stack`) | yes |
 | `make images` | the production image of each model (vp, ut-plus, vp-six, z3817a), ELF and raw binary, named by commit, with SHA256SUMS, in `firmware/oncore-fw/target/images/` | yes: kept as the run's artifact, and a tag's GitHub release |
-| `firmware/tools` unittest, 21 | `board_serial.py`, `stack_frames.py`, `coverage.py` (the coverage page current, every claim recorded) | yes, in `make stack` |
+| `firmware/tools` unittest, 24 | `board_serial.py`, `stack_frames.py`, `coverage.py` (the coverage page current, every claim recorded, its picture there) | yes, in `make stack` |
 
 ## On the board
 

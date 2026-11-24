@@ -17,9 +17,11 @@ from pathlib import Path
 from typing import Any
 
 REPO = Path(__file__).resolve().parents[2]
-SOURCE = REPO / "docs" / "coverage.json"
-PAGE = REPO / "docs" / "coverage.html"
-BLOB = "https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/"
+DOCS = REPO / "docs"
+SOURCE = DOCS / "coverage.json"
+PAGE = DOCS / "coverage.html"
+REPOSITORY = "https://github.com/charlieh0tel/smartclock-oncore-emulator"
+BLOB = f"{REPOSITORY}/blob/main/"
 GENERATOR = "firmware/tools/coverage.py"
 # The statuses that claim a run, so must cite where it is recorded.
 CLAIMS = ("yes", "partial")
@@ -53,9 +55,11 @@ def headings(path: Path) -> set[str]:
 
 def problems(data: dict[str, Any]) -> list[str]:
     """Each cell's fault: an unknown status, a claim without its record, or a record
-    that is not there."""
+    that is not there; and a figure whose picture is not there."""
     keys = [c["key"] for c in data["columns"]]
     out = []
+    if not (REPO / data["figure"]["path"]).is_file():
+        out.append(f"figure: no file {data['figure']['path']}")
     for row in data["rows"]:
         if sorted(row["cells"]) != sorted(keys):
             out.append(f"{row['image']}: cells {sorted(row['cells'])}, columns {sorted(keys)}")
@@ -83,6 +87,17 @@ def cell_html(cell: dict[str, Any]) -> str:
         label = f'<a href="{html.escape(href)}">{label}</a>'
     note = f'<span class="note">{html.escape(cell["note"])}</span>' if "note" in cell else ""
     return f'<td class="{cell["status"]}">{label}{note}</td>'
+
+
+def figure_html(figure: dict[str, str]) -> str:
+    """The picture, its path given from the repository's root, linked from the page in docs/;
+    its caption links the repository, as the page is the repository's home page."""
+    src = (REPO / figure["path"]).relative_to(DOCS).as_posix()
+    return (
+        f'<figure><img src="{html.escape(src)}" alt="{html.escape(figure["alt"])}">'
+        f"<figcaption>{html.escape(figure['caption'])} "
+        f'<a href="{REPOSITORY}">{REPOSITORY.removeprefix("https://")}</a></figcaption></figure>'
+    )
 
 
 def render(data: dict[str, Any]) -> str:
@@ -135,10 +150,14 @@ td.not-yet, td.not-planned {{ color: var(--muted); }}
 .note {{ display: block; color: var(--muted); font-size: 12px; }}
 a {{ color: inherit; }}
 footer {{ color: var(--muted); font-size: 13px; margin-top: 24px; }}
+figure {{ margin: 0 0 16px; max-width: 75ch; }}
+figure img {{ display: block; width: 100%; height: auto; }}
+figcaption {{ color: var(--muted); font-size: 13px; }}
 </style>
 </head>
 <body>
 <h1>{title}</h1>
+{figure_html(data["figure"])}
 <p>{html.escape(data["intro"])}</p>
 <div class="scroll">
 <table>
