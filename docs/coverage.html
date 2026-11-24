@@ -24,10 +24,14 @@ td.not-yet, td.not-planned { color: var(--muted); }
 .note { display: block; color: var(--muted); font-size: 12px; }
 a { color: inherit; }
 footer { color: var(--muted); font-size: 13px; margin-top: 24px; }
+figure { margin: 0 0 16px; max-width: 75ch; }
+figure img { display: block; width: 100%; height: auto; }
+figcaption { color: var(--muted); font-size: 13px; }
 </style>
 </head>
 <body>
 <h1>Coverage by instrument</h1>
+<figure><img src="images/board.webp" alt="The board, rev 1.0.0, with its u-blox LEA-M8T and STM32C091"><figcaption>The board, rev 1.0.0.</figcaption></figure>
 <p>Which instrument images the emulator has been run against, and how: a row per image, a column per way of running it or test. The in-emulation columns run the instrument&#x27;s image in emulation from power-on, without its 1 PPS input under test; the hardware columns run the instrument itself; the leap second columns run oncore-host&#x27;s test hooks against the image. A Yes, Partial or In review links to where the repository records it, and the generator checks that the section is there.</p>
 <div class="scroll">
 <table>

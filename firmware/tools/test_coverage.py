@@ -32,6 +32,14 @@ class Coverage(unittest.TestCase):
         cell["section"] = "No such heading"
         self.assertIn("no heading", problems(data)[0])
 
+    def test_the_figure_must_exist(self) -> None:
+        data = copy.deepcopy(table())
+        data["figure"]["path"] = "docs/images/no-such.webp"
+        self.assertIn("figure: no file", problems(data)[0])
+
+    def test_the_figure_is_linked_from_docs(self) -> None:
+        self.assertIn('src="images/board.webp"', render(table()))
+
     def test_github_anchors(self) -> None:
         self.assertEqual(
             slug("The Z3801A's 3543 image, from power-on"), "the-z3801as-3543-image-from-power-on"

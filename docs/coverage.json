@@ -1,6 +1,11 @@
 {
   "title": "Coverage by instrument",
   "intro": "Which instrument images the emulator has been run against, and how: a row per image, a column per way of running it or test. The in-emulation columns run the instrument's image in emulation from power-on, without its 1 PPS input under test; the hardware columns run the instrument itself; the leap second columns run oncore-host's test hooks against the image. A Yes, Partial or In review links to where the repository records it, and the generator checks that the section is there.",
+  "figure": {
+    "path": "docs/images/board.webp",
+    "alt": "The board, rev 1.0.0, with its u-blox LEA-M8T and STM32C091",
+    "caption": "The board, rev 1.0.0."
+  },
   "columns": [
     {
       "key": "host_image",
