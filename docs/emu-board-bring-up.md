@@ -408,8 +408,9 @@ gives the same to within 0.25 ns up to 200 s; the 58503A 2.89 ns at
 
 `:DIAG:ROSC:TCO` (the loop's oven-current term, in the EEPROM's
 calibration block; smartclock `docs/firmware/loop.md`, "s, the
-oscillator current"): -60 from 2026-11-23 21:12 UTC, was -33.65, the
-value for the 58503A's old oscillator.  The 05071-60219's, estimated
+oscillator current"): -64 from 2026-11-24 09:49:52 UTC; -60 from
+2026-11-23 21:12 UTC; before that -33.65, the value for the 58503A's
+old oscillator.  The 05071-60219's, estimated
 from its DAC against aging (a + b y + c ln y) and oven current over
 11-22 08:00 to 11-23 20:00: -84 to -89.
 
@@ -421,7 +422,7 @@ count), 0.79 of the 3704's nominal 3.2768e-9; one step, not checked
 otherwise.
 
 The run replayed through the 3704's loop (smartclock `simulate-loop
---replay`, PR #197; `docs/firmware/loop.md`, "Simulating it"), its
+--replay`; `docs/firmware/loop.md`, "Simulating it"), its
 aging fit from an empty history at 05:27 11-22, the oven-current term
 at each value below, over the hours before the step (oven current 90
 to 105), simulated less logged own TI:
@@ -439,6 +440,33 @@ against -2.3 to -0.75 needed); at -75 or -86 it mostly goes.  The
 4.4 h after the step hold too little oven-current change to fix the
 value; the aging model moves the -60 to -86 margin as much as the
 1.5 ns between them.
+
+A TCO step changes the EFC at once by the step times the oven current,
+which the loop takes as a step of the oscillator's frequency.  The
+3704's loop given that step at the measured sensitivity
+(`simulate-loop --frequency-step`) peaks at 903 ns 1,460 s after the
+-60 step, against 944 ns above the TI before it at 1,464 s logged;
+`--replay --estimate-aging` with `--tc-coefficient` does not show a
+step's transient, its aging recovered from an EFC that holds it.  The
+step to -64: EFC -403 counts (697339 to 696936); own TI -51.6 ns
+before, +105.2 ns at 10:14:17 (modeled about +100 ns at 25 minutes),
+back to its earlier level by 11:20; still Locked, no alarm.
+
+The EFC the oscillator needs (EFC plus the own TI's rate over the
+sensitivity, 5-minute means, each step's transient left out) fitted
+to aging and oven current, in counts per unit of oven current:
+
+| Window | Oven current | Aging a + b y + c ln y | Aging a + b y |
+| ------ | ------------ | ---------------------- | ------------- |
+| 11-22 21:30 to 11-23 21:10 | 90.9 to 105.1 | -91.8 | |
+| 11-24 01:00 to 18:05 | 92.5 to 101.9 | -47.7 | -66.0 |
+| 11-24 12:00 to 18:05, the oven current down 9 at 17:00 | 92.6 to 102.1 | | -48.4 (best with no lag) |
+| Both | 90.9 to 105.1 | -71.4 | |
+
+The own TI from 12:00 to 18:05 11-24, -30 to -60 ns with the oven
+current flat, matches the loop's standing error for the EFC's fall
+over those hours (-137 counts/h, -47 ns), which the aging fit, its
+history still holding both steps, does not cover; no TCO removes it.
 
 ### 2026-11-24, one start
 
