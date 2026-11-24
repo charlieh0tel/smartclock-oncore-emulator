@@ -20,7 +20,8 @@ REPO = Path(__file__).resolve().parents[2]
 DOCS = REPO / "docs"
 SOURCE = DOCS / "coverage.json"
 PAGE = DOCS / "coverage.html"
-BLOB = "https://github.com/charlieh0tel/smartclock-oncore-emulator/blob/main/"
+REPOSITORY = "https://github.com/charlieh0tel/smartclock-oncore-emulator"
+BLOB = f"{REPOSITORY}/blob/main/"
 GENERATOR = "firmware/tools/coverage.py"
 # The statuses that claim a run, so must cite where it is recorded.
 CLAIMS = ("yes", "partial")
@@ -89,11 +90,13 @@ def cell_html(cell: dict[str, Any]) -> str:
 
 
 def figure_html(figure: dict[str, str]) -> str:
-    """The picture, its path given from the repository's root, linked from the page in docs/."""
+    """The picture, its path given from the repository's root, linked from the page in docs/;
+    its caption links the repository, as the page is the repository's home page."""
     src = (REPO / figure["path"]).relative_to(DOCS).as_posix()
     return (
         f'<figure><img src="{html.escape(src)}" alt="{html.escape(figure["alt"])}">'
-        f"<figcaption>{html.escape(figure['caption'])}</figcaption></figure>"
+        f"<figcaption>{html.escape(figure['caption'])} "
+        f'<a href="{REPOSITORY}">{REPOSITORY.removeprefix("https://")}</a></figcaption></figure>'
     )
 
 

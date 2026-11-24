@@ -5,7 +5,7 @@ import json
 import unittest
 from typing import Any
 
-from coverage import PAGE, SOURCE, problems, render, slug
+from coverage import PAGE, REPOSITORY, SOURCE, problems, render, slug
 
 
 def table() -> dict[str, Any]:
@@ -39,6 +39,9 @@ class Coverage(unittest.TestCase):
 
     def test_the_figure_is_linked_from_docs(self) -> None:
         self.assertIn('src="images/board.webp"', render(table()))
+
+    def test_the_caption_links_the_repository(self) -> None:
+        self.assertIn(f'<a href="{REPOSITORY}">', render(table()))
 
     def test_github_anchors(self) -> None:
         self.assertEqual(
