@@ -404,6 +404,53 @@ at 1 s and 9.2e-12 at 1000 s, its TDEV 0.55 ns at 100 s and 4.6 ns at
 gives the same to within 0.25 ns up to 200 s; the 58503A 2.89 ns at
 500 s and 7.48 ns at 1000 s.
 
+### The 58503A's oven-current coefficient
+
+`:DIAG:ROSC:TCO` (the loop's oven-current term, in the EEPROM's
+calibration block; smartclock `docs/firmware/loop.md`, "s, the
+oscillator current"): -60 from 2026-11-23 21:12 UTC, was -33.65, the
+value for the 58503A's old oscillator.  The 05071-60219's, estimated
+from its DAC against aging (a + b y + c ln y) and oven current over
+11-22 08:00 to 11-23 20:00: -84 to -89.
+
+The step at -60 (smartclockd's log): EFC -2,566 counts (700515 to
+697949); the 58503A's own TI to 974.1 ns at 21:36:48, still Locked, no
+alarm; under 30 ns from 00:44 11-24.  Its rise and recovery give the
+05071-60219's EFC sensitivity: 2.58e-9 per EFC percent (4.9e-13 per
+count), 0.79 of the 3704's nominal 3.2768e-9; one step, not checked
+otherwise.
+
+The run replayed through the 3704's loop (smartclock `simulate-loop
+--replay`, PR #197; `docs/firmware/loop.md`, "Simulating it"), its
+aging fit from an empty history at 05:27 11-22, the oven-current term
+at each value below, over the hours before the step (oven current 90
+to 105), simulated less logged own TI:
+
+| TCO | -33.65 | -45 | -60 | -75 | -86 | -100 |
+| --- | ------ | --- | --- | --- | --- | ---- |
+| TI rms, ns | 23.05 | 19.88 | 16.68 | 15.23 | 15.56 | 17.63 |
+
+With the logged TCO and the applied aging feed-forward recovered from
+the log, the replay follows the whole run to 1.12 ns rms, the step's
+peak to 0.5 ns.  The own TI's climb on 11-23, +0.5 to +43.5 ns
+(hourly means), replays as the loop's standing error while the
+aging fit's rate lagged the oscillator's (-2.2 to -1.7 %/day applied
+against -2.3 to -0.75 needed); at -75 or -86 it mostly goes.  The
+4.4 h after the step hold too little oven-current change to fix the
+value; the aging model moves the -60 to -86 margin as much as the
+1.5 ns between them.
+
+### 2026-11-24, one start
+
+The CNS's front 1 PPS through a Y to both counters' channel 1, each
+leg 13 in longer than the stop cables (common to both counters), and
+on to the scope; the 58503A (board 0001) on the 53230A's channel 2,
+board 0005 on jig 0209 on the 53132A's, stop cables of equal length,
+antenna feeds nearly so.  Counters 1 MOhm, DC; the scope in 50 ohm.
+Levels at each edge's midpoint: CNS 1.883 V (5.6 ns 10-90% rise),
+58503A 1.397 V (18.4 ns), jig 1.243 V (3.5 ns).  TCO -60.  Logging
+from 01:36 UTC.
+
 ### Bias against UTC
 
 The 58503A's rear 1 PPS, estimated against UTC from the CNS Clock II
