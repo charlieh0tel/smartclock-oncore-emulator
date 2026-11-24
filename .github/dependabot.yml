@@ -1,0 +1,20 @@
+version: 2
+
+updates:
+# The actions here are referenced by major-version tag, so what Dependabot
+# brings is the next major when one ships, grouped into one weekly PR.
+#
+# ee-tooling.yml is written by ee_tooling's adopt from its template and
+# checked against it, so it changes only through adopt.
+#
+# Actions only: advisories for the locked dependencies come from Dependabot
+# alerts and security updates, and version bumps alone are noise.
+- package-ecosystem: github-actions
+  directory: /
+  exclude-paths:
+  - .github/workflows/ee-tooling.yml
+  schedule:
+    interval: weekly
+  groups:
+    actions:
+      patterns: ["*"]
