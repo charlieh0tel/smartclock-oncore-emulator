@@ -42,10 +42,22 @@
       "title": "Leap second crossing",
       "group": "Leap second",
       "means": "oncore-host --fake-time and --leap-pending against the image in emulation, across a quarter's end: the image's time and leap seconds through 23:59:60 and after."
+    },
+    {
+      "key": "date_host",
+      "title": "oncore-host",
+      "group": "Date",
+      "means": "oncore-host replaying firmware/testdata/neo-m8t-2026-10-28.ubx against the image in emulation, from power-on: :PTIMe:DATE? reads the recording's day, +2026,+10,+28, not one 1024 weeks early."
+    },
+    {
+      "key": "date_board",
+      "title": "Board",
+      "group": "Date",
+      "means": "The board on its jig, its module live, against the image in emulation, from power-on: :PTIMe:DATE? reads the day's UTC date."
     }
   ],
   "statuses": {
-    "yes": "run, and the instrument reached Locked to GPS (or qualified its GPS reference); in a leap second column, it read the leap second as the column says",
+    "yes": "run, and the instrument reached Locked to GPS (or qualified its GPS reference); in a leap second column, it read the leap second as the column says; in a date column, it read the date as the column says",
     "partial": "run, but not all the way: the note says how far",
     "in-review": "the code to run it is in an open pull request, not yet run",
     "not-yet": "not run",
@@ -60,7 +72,9 @@
         "host_hw": {"status": "not-yet"},
         "board_hw": {"status": "not-yet"},
         "leap_pending": {"status": "not-yet"},
-        "leap_crossing": {"status": "not-yet"}
+        "leap_crossing": {"status": "not-yet"},
+        "date_host": {"status": "not-yet"},
+        "date_board": {"status": "not-yet"}
       }
     },
     {
@@ -71,7 +85,9 @@
         "host_hw": {"status": "not-yet"},
         "board_hw": {"status": "yes", "note": "locked at 13 min, then days against a CNS Clock II", "path": "docs/emu-board-bring-up.md", "section": "In the 58503A"},
         "leap_pending": {"status": "yes", "note": "reads @@Bj alone, booked for the quarter's end, 2026-11-12", "path": "TODO.md", "section": "UT Plus"},
-        "leap_crossing": {"status": "yes", "note": "crossed with lock held, a second inserted, ACC +19, 2026-11-12", "path": "TODO.md", "section": "UT Plus"}
+        "leap_crossing": {"status": "yes", "note": "crossed with lock held, a second inserted, ACC +19, 2026-11-12", "path": "TODO.md", "section": "UT Plus"},
+        "date_host": {"status": "yes", "note": "from 135 s, vp; 150 s, vp-six; 2026-11-24", "path": "docs/testing.md", "section": "The date"},
+        "date_board": {"status": "partial", "note": "from 135 s, vp; vp-six: no date in 10 min, Tracking 0, twice; 2026-11-24", "path": "docs/testing.md", "section": "The date"}
       }
     },
     {
@@ -82,7 +98,9 @@
         "host_hw": {"status": "not-yet"},
         "board_hw": {"status": "not-yet"},
         "leap_pending": {"status": "yes", "note": "reads @@Bj alone, booked for the quarter's end; on both paths, 2026-11-12", "path": "TODO.md", "section": "UT Plus"},
-        "leap_crossing": {"status": "yes", "note": "crossed with lock held on both paths; 23:59:60 read on the UT Plus path, ACC +19, 2026-11-12", "path": "TODO.md", "section": "UT Plus"}
+        "leap_crossing": {"status": "yes", "note": "crossed with lock held on both paths; 23:59:60 read on the UT Plus path, ACC +19, 2026-11-12", "path": "TODO.md", "section": "UT Plus"},
+        "date_host": {"status": "yes", "note": "from 123 s, vp; 141 s, vp-six; 123 s, ut-plus; 2026-11-24", "path": "docs/testing.md", "section": "The date"},
+        "date_board": {"status": "yes", "note": "from 141 s, vp and vp-six; 123 s, ut-plus; 2026-11-24", "path": "docs/testing.md", "section": "The date"}
       }
     },
     {
@@ -93,7 +111,9 @@
         "host_hw": {"status": "not-yet", "path": "TODO.md", "section": "Firmware"},
         "board_hw": {"status": "not-yet"},
         "leap_pending": {"status": "yes", "note": "reads @@Bj alone, booked for the quarter's end, 2026-11-12", "path": "TODO.md", "section": "UT Plus"},
-        "leap_crossing": {"status": "yes", "note": "crossed with lock held, GPS time unbroken, ACC +19; its screen still pending 10 min after, 2026-11-12", "path": "TODO.md", "section": "UT Plus"}
+        "leap_crossing": {"status": "yes", "note": "crossed with lock held, GPS time unbroken, ACC +19; its screen still pending 10 min after, 2026-11-12", "path": "TODO.md", "section": "UT Plus"},
+        "date_host": {"status": "yes", "note": "from 159 s, 2026-11-24", "path": "docs/testing.md", "section": "The date"},
+        "date_board": {"status": "yes", "note": "from 159 s, 2026-11-24", "path": "docs/testing.md", "section": "The date"}
       }
     },
     {
@@ -104,7 +124,9 @@
         "host_hw": {"status": "not-yet", "path": "TODO.md", "section": "Firmware"},
         "board_hw": {"status": "not-yet"},
         "leap_pending": {"status": "yes", "note": "reads @@Bj alone, booked for the quarter's end, 2026-11-12", "path": "TODO.md", "section": "UT Plus"},
-        "leap_crossing": {"status": "yes", "note": "crossed with lock held, GPS time unbroken, ACC +19; its screen still pending 10 min after, 2026-11-12", "path": "TODO.md", "section": "UT Plus"}
+        "leap_crossing": {"status": "yes", "note": "crossed with lock held, GPS time unbroken, ACC +19; its screen still pending 10 min after, 2026-11-12", "path": "TODO.md", "section": "UT Plus"},
+        "date_host": {"status": "yes", "note": "from 165 s, 2026-11-24", "path": "docs/testing.md", "section": "The date"},
+        "date_board": {"status": "yes", "note": "from 165 s, 2026-11-24", "path": "docs/testing.md", "section": "The date"}
       }
     },
     {
@@ -115,7 +137,9 @@
         "host_hw": {"status": "not-planned"},
         "board_hw": {"status": "not-planned"},
         "leap_pending": {"status": "not-planned"},
-        "leap_crossing": {"status": "not-planned"}
+        "leap_crossing": {"status": "not-planned"},
+        "date_host": {"status": "not-planned"},
+        "date_board": {"status": "not-planned"}
       }
     },
     {
@@ -126,7 +150,9 @@
         "host_hw": {"status": "not-yet"},
         "board_hw": {"status": "not-yet"},
         "leap_pending": {"status": "yes", "note": "reads @@Bj alone, booked for the quarter's end; on both paths, 2026-11-12", "path": "TODO.md", "section": "UT Plus"},
-        "leap_crossing": {"status": "yes", "note": "crossed with lock held on both paths, GPS time unbroken, ACC +19, 2026-11-12", "path": "TODO.md", "section": "UT Plus"}
+        "leap_crossing": {"status": "yes", "note": "crossed with lock held on both paths, GPS time unbroken, ACC +19, 2026-11-12", "path": "TODO.md", "section": "UT Plus"},
+        "date_host": {"status": "yes", "note": "from 135 s, vp and ut-plus; 153 s, vp-six; 2026-11-24", "path": "docs/testing.md", "section": "The date"},
+        "date_board": {"status": "yes", "note": "from 135 s, vp and ut-plus; 153 s, vp-six; 2026-11-24", "path": "docs/testing.md", "section": "The date"}
       }
     },
     {
@@ -137,7 +163,9 @@
         "host_hw": {"status": "yes", "note": "oncore-host's z3817a preset: GPS reference valid, TFOM 3, FFOM 0, 2026-11-11", "path": "PLAN.md", "section": "Firmware"},
         "board_hw": {"status": "not-yet"},
         "leap_pending": {"status": "not-yet"},
-        "leap_crossing": {"status": "not-yet"}
+        "leap_crossing": {"status": "not-yet"},
+        "date_host": {"status": "yes", "note": "from 393 s, 2026-11-24", "path": "docs/testing.md", "section": "The date"},
+        "date_board": {"status": "yes", "note": "from 376 s, the z3817a build, 2026-11-24", "path": "docs/testing.md", "section": "The date"}
       }
     }
   ]

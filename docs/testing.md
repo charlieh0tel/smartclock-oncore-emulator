@@ -6,8 +6,9 @@ instrument](https://charlieh0tel.github.io/smartclock-oncore-emulator/coverage.h
 `docs/coverage.json`) sets each instrument image against each way it
 has been run: `oncore-host` or the board against the image in
 emulation, and `oncore-host` or the board in the instrument itself;
-and `oncore-host`'s leap second hooks against the image in emulation,
-pending and across a quarter's end.
+`oncore-host`'s leap second hooks against the image in emulation,
+pending and across a quarter's end; and the date each image reads in
+emulation, against `oncore-host` and the board.
 
 ## Host and CI
 
@@ -42,6 +43,7 @@ smartclock-gps cb968ece): each build flashed, lock, 15 minutes locked,
 | `*TST?`, relock, VP | 184 s | 191 s | 153 s | 137 s | 157 s | 627 s |
 | Longest run, locked throughout | 7 h | not yet | 3 h | 2.7 h | not yet | not yet |
 | GPS week boundary | not run | not run | not run | locked through it, date right, on the board | not run | not run |
+| Date, `:PTIMe:DATE?` ("The date") | right from 159 s | right from 165 s | right from 135 s; `vp-six` none | right from 141 s | right from 135 s | right from 376 s, `z3817a` build |
 | Self Test, GPS Rcv | OK, OK | OK, OK | OK, OK | OK, OK | OK, OK | OK, OK |
 | `:SYST:ERR?`, alarms locked | no error, none | no error, none | no error, none | no error, none | no error, none | no error, none |
 
@@ -52,6 +54,39 @@ advance about 0.8 % a minute.  The Z38xx
 images pass through coarse frequency adjust, phase alignment and leap
 second determination, which the 58503B does not; the board answers all
 their set-up within 18 s.
+
+## The date
+
+`:PTIMe:DATE?` from each image in emulation (smartclock-emu 1.9.2),
+polled every 15 s from power-on, warm-up skipped, 2026-11-24.  Against
+`oncore-host` replaying `firmware/testdata/neo-m8t-2026-10-28.ubx`,
+every reply once set read +2026,+10,+28; against board 0002 on jig
+0208, its module live and the board reset over SWD before each image,
++2026,+11,+24, the day's UTC date.  None read a date 1024 weeks early.
+Before the first date each answered nothing (`E-230`).  The first
+date, seconds from power-on:
+
+| Image | `oncore-host`, VP | `vp-six` | `ut-plus` | Board, VP | `vp-six` | `ut-plus` |
+|---|---|---|---|---|---|---|
+| Z3801A 3543 | 159 | | | 159 | | |
+| Z3805A 3543B | 165 | | | 165 | | |
+| 58503A 3704 | 135 | 150 | | 135 | none in 10 min, twice | |
+| 58503B 1.01.04 | 123 | 141 | 123 | 141 | 141 | 123 |
+| Z3816A 4001 | 135 | 153 | 135 | 135 | 153 | 135 |
+| Z3817A 3752 | 393 | | | 376, the `z3817a` build | | |
+
+The Z3817A runs on the emulator's `boards/z3817a.toml`, `oncore-host`
+with `--initial-config z3817a`; it passes through "Power-up: TIMEREF"
+before its date.  The Z3816A with its time code off.
+
+The 58503A on the board's `vp-six` build stayed in "Power-up: GPS
+acquisition", `Tracking: 0`, no date, in two runs; the same image on
+`oncore-host --model vp-six` and on the board's VP build gave its date,
+and the 58503B and Z3816A on the same `vp-six` build theirs.
+
+Not covered: a GPS week boundary.  The recording is from a Wednesday
+and the board's runs from a Tuesday; the 58503B's run on the board
+across 2026-11-08 ("GPS week boundary", above) is the only one.
 
 ## In an instrument
 
