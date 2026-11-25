@@ -87,7 +87,7 @@
         "leap_pending": {"status": "yes", "note": "reads @@Bj alone, booked for the quarter's end, 2026-11-12", "path": "TODO.md", "section": "UT Plus"},
         "leap_crossing": {"status": "yes", "note": "crossed with lock held, a second inserted, ACC +19, 2026-11-12", "path": "TODO.md", "section": "UT Plus"},
         "date_host": {"status": "yes", "note": "from 135 s, vp; 150 s, vp-six; 2026-11-24", "path": "docs/testing.md", "section": "The date"},
-        "date_board": {"status": "partial", "note": "from 135 s, vp; vp-six: no date in 10 min, Tracking 0, twice; 2026-11-24", "path": "docs/testing.md", "section": "The date"}
+        "date_board": {"status": "yes", "note": "from 135 s, vp; vp-six from 135 to 150 s, locked in 12 runs of 14; 2026-11-24", "path": "docs/testing.md", "section": "The date"}
       }
     },
     {
