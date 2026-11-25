@@ -43,7 +43,7 @@ smartclock-gps cb968ece): each build flashed, lock, 15 minutes locked,
 | `*TST?`, relock, VP | 184 s | 191 s | 153 s | 137 s | 157 s | 627 s |
 | Longest run, locked throughout | 7 h | not yet | 3 h | 2.7 h | not yet | not yet |
 | GPS week boundary | not run | not run | not run | locked through it, date right, on the board | not run | not run |
-| Date, `:PTIMe:DATE?` ("The date") | right from 159 s | right from 165 s | right from 135 s; `vp-six` none | right from 141 s | right from 135 s | right from 376 s, `z3817a` build |
+| Date, `:PTIMe:DATE?` ("The date") | right from 159 s | right from 165 s | right from 135 s | right from 141 s | right from 135 s | right from 376 s, `z3817a` build |
 | Self Test, GPS Rcv | OK, OK | OK, OK | OK, OK | OK, OK | OK, OK | OK, OK |
 | `:SYST:ERR?`, alarms locked | no error, none | no error, none | no error, none | no error, none | no error, none | no error, none |
 
@@ -70,7 +70,7 @@ date, seconds from power-on:
 |---|---|---|---|---|---|---|
 | Z3801A 3543 | 159 | | | 159 | | |
 | Z3805A 3543B | 165 | | | 165 | | |
-| 58503A 3704 | 135 | 150 | | 135 | none in 10 min, twice | |
+| 58503A 3704 | 135 | 150 | | 135 | 135 to 150; none in 2 runs of 14 | |
 | 58503B 1.01.04 | 123 | 141 | 123 | 141 | 141 | 123 |
 | Z3816A 4001 | 135 | 153 | 135 | 135 | 153 | 135 |
 | Z3817A 3752 | 393 | | | 376, the `z3817a` build | | |
@@ -79,10 +79,13 @@ The Z3817A runs on the emulator's `boards/z3817a.toml`, `oncore-host`
 with `--initial-config z3817a`; it passes through "Power-up: TIMEREF"
 before its date.  The Z3816A with its time code off.
 
-The 58503A on the board's `vp-six` build stayed in "Power-up: GPS
-acquisition", `Tracking: 0`, no date, in two runs; the same image on
-`oncore-host --model vp-six` and on the board's VP build gave its date,
-and the 58503B and Z3816A on the same `vp-six` build theirs.
+The 58503A on the board's `vp-six` build locked in 12 runs of 14, the
+six of them that polled `:PTIMe:DATE?` with the date from 135 to 150 s;
+in the first two, neither with the Oncore traffic captured, it stayed
+in "Power-up: GPS acquisition", `Tracking: 0`.  The 12, each from a
+board reset, captured the traffic: `@@Cg` 0, the
+set-up with both `@@Ar`s answered, `@@Cg` 1, the board's output
+throughout.
 
 Not covered: a GPS week boundary.  The recording is from a Wednesday
 and the board's runs from a Tuesday; the 58503B's run on the board
