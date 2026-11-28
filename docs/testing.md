@@ -99,6 +99,13 @@ fw-v1.0.0 on board 0001 in a 58503A (3704), 2026-11-22: locked 16 h
 with no alarm, holdover or error, its 1 PPS against a CNS Clock II
 (`docs/emu-board-bring-up.md`, "In the 58503A").
 
+fw-v1.0.0's source (c916406) on board 0002 in a Z3801A, 2026-11-28:
+locked about 5.5 min from power-on.  Reflashed in place through the
+instrument's console relay (`bench/README.md`, `stm32boot.py`
+`--relay`), the case closed: 110376 bytes written and verified, its
+build read back as 2938108, the board tracking 6 and in position hold
+after the instrument's reset.
+
 Not covered yet: the board in an instrument other than the 58503A
-3704 (`docs/coverage.html`); the 58503A 3633 image; the supply rails
+3704 and the Z3801A (`docs/coverage.html`); the 58503A 3633 image; the supply rails
 and current; the antenna-fault report (CFG-ANT).
