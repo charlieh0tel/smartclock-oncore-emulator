@@ -44,7 +44,9 @@ immediate trigger, before a run.
 
 Flashes an STM32 through its ROM serial bootloader (ST AN3155, 8E1):
 `id` reads the product ID, `write` mass-erases, writes a binary from
-`llvm-objcopy -O binary` at 0x08000000 and reads it back.  For parts
+`llvm-objcopy -O binary` at 0x08000000 and reads it back, its first
+256 bytes (the vector table) last: until they are written, flash reads
+empty at power-on and the part starts its ROM bootloader.  For parts
 `stm32flash` 0.7 does not know, the STM32C091 (0x44d) among them.
 
 - `--knock` first starts the emulator board's bootloader over the
@@ -73,9 +75,10 @@ Flashes an STM32 through its ROM serial bootloader (ST AN3155, 8E1):
   relay's switch byte (often garbled) to arrive and be discarded, the
   bootloader at that rate, always Go
   (the board's power stays on), and a last break that resets the
-  instrument.  On any error it stops with the instrument still frozen.
-  `id` and `build` only: it refuses `write`, since a failed write in a
-  closed instrument needs SWD.  Not yet run on hardware.
+  instrument.  On any error it stops with the instrument still frozen
+  and the board in its bootloader.  A write that fails leaves the
+  vector table erased: power-cycled, the board starts its ROM
+  bootloader, which the knock does not reach (SWD).
 
 An update: `uv run python stm32boot.py write --knock --go DEVICE
 oncore-fw.bin`.  Its build: `uv run python stm32boot.py build --knock --go DEVICE`.

@@ -1,5 +1,7 @@
 """Tests for the ROM bootloader's protocol against a fake bootloader."""
 
+from pathlib import Path
+
 import pytest
 import serial
 
@@ -15,6 +17,11 @@ GARBLED_SWITCH = b"\xfc"
 """The relay's E as the Z3801A's run heard it, sent before the port had switched."""
 ECHO_GIVE_UP_S = 0.05
 """A short wait for an echo that will not come."""
+IMAGE_PATTERN = 251
+"""A prime, so no chunk of the image repeats another."""
+IMAGE = bytes(i % IMAGE_PATTERN for i in range(IMAGE_BYTES))
+BODY_WRITES = [FLASH + offset for offset in range(stm32boot.CHUNK, IMAGE_BYTES, stm32boot.CHUNK)]
+"""The image's writes before its vector table's."""
 
 
 class FakeBootloader:
@@ -29,6 +36,8 @@ class FakeBootloader:
         self.started: int | None = None
         self.synced = False
         """Synced, after which 0x7F is a command's first byte, as on the part."""
+        self.writes: list[int] = []
+        """Each write's address, in order."""
 
     def reset_input_buffer(self) -> None:
         self._out = b""
@@ -85,6 +94,10 @@ class FakeBootloader:
         elif code == stm32boot.READ_MEMORY:
             self._memory_op(body, write=False)
 
+    def _written(self, address: int, data: bytes) -> bytes:
+        """What a write of `data` at `address` leaves in flash."""
+        return data
+
     def _memory_op(self, body: bytes, write: bool) -> None:
         if not body:
             self._out += bytes([ACK])
@@ -97,7 +110,8 @@ class FakeBootloader:
         if write:
             if len(body) < 5 + 1 + count + 1:
                 return
-            data = body[6 : 6 + count]
+            data = self._written(address, body[6 : 6 + count])
+            self.writes.append(address)
             for i, b in enumerate(data):
                 self.memory[address + i] = b
             self._out += bytes([ACK])
@@ -108,6 +122,11 @@ class FakeBootloader:
                 self.memory.get(address + i, stm32boot.ERASED) for i in range(count)
             )
         self._in = b""
+
+
+def flashed(fake: FakeBootloader) -> bytes:
+    """The image's span of `fake`'s flash."""
+    return bytes(fake.memory.get(FLASH + i, stm32boot.ERASED) for i in range(IMAGE_BYTES))
 
 
 def test_checksums_and_frames() -> None:
@@ -121,13 +140,29 @@ def test_id_and_flash_and_verify() -> None:
     boot = Bootloader(fake)
     boot.connect()
     assert boot.product_id() == PRODUCT_ID
-    image = bytes(i % 251 for i in range(IMAGE_BYTES))
-    boot.flash(image)
+    boot.flash(IMAGE)
     assert fake.erased
-    assert bytes(fake.memory[FLASH + i] for i in range(IMAGE_BYTES)) == image
+    assert flashed(fake) == IMAGE
     assert fake.timeout == stm32boot.READ_TIMEOUT_S
     boot.go(FLASH)
     assert fake.started == FLASH
+
+
+def test_the_vector_table_is_written_last() -> None:
+    fake = FakeBootloader()
+    Bootloader(fake).flash(IMAGE)
+    assert fake.writes == [*BODY_WRITES, FLASH]
+
+
+def test_a_failed_verify_leaves_the_vector_table_erased() -> None:
+    class Corrupting(FakeBootloader):
+        def _written(self, address: int, data: bytes) -> bytes:
+            return bytes(b ^ 0xFF for b in data) if address == BODY_WRITES[-1] else data
+
+    fake = Corrupting()
+    with pytest.raises(BootloaderError):
+        Bootloader(fake).flash(IMAGE)
+    assert FLASH not in fake.memory
 
 
 def test_a_silent_port_is_reported() -> None:
@@ -292,4 +327,13 @@ def test_a_garbled_switch_byte_late_is_passed_over() -> None:
     boot = stm32boot.relay_bootloader(relay)
     relay.late(GARBLED_SWITCH)
     assert stm32boot.run(boot, "id", None, go=True)
+    assert relay.started == FLASH
+
+
+def test_the_relay_writes(tmp_path: Path) -> None:
+    image = tmp_path / "oncore-fw.bin"
+    image.write_bytes(IMAGE)
+    relay = FakeRelay()
+    assert stm32boot.run(stm32boot.relay_bootloader(relay), "write", image, go=True)
+    assert flashed(relay) == IMAGE
     assert relay.started == FLASH
