@@ -200,16 +200,45 @@ class FakeRelay(FakeBootloader):
     """The relay and the board behind it: the knock echoed at 9600 8N1, then, after a break,
     the bootloader at the relay's second setting."""
 
-    def __init__(self) -> None:
+    def __init__(self, says_switched: bool = True) -> None:
         super().__init__()
-        self.baudrate = stm32boot.ONCORE_BAUD
-        self.parity = serial.PARITY_NONE
+        self._says_switched = says_switched
+        self._break = False
+        self._baudrate = stm32boot.ONCORE_BAUD
+        self._parity = serial.PARITY_NONE
         self.breaks = 0
         self.before_switch = b""
         self.settings_at_sync: tuple[int, str] | None = None
 
-    def send_break(self, duration: float = stm32boot.RELAY_BREAK_S, /) -> None:
-        self.breaks += 1
+    @property
+    def break_condition(self) -> bool:
+        return self._break
+
+    @break_condition.setter
+    def break_condition(self, on: bool) -> None:
+        if self._break and not on:
+            self.breaks += 1
+            if self._says_switched:
+                self._out += stm32boot.RELAY_SWITCHED
+        self._break = on
+
+    @property
+    def baudrate(self) -> int:
+        return self._baudrate
+
+    @baudrate.setter
+    def baudrate(self, rate: int) -> None:
+        assert not self._break, "the rate changed during a break"
+        self._baudrate = rate
+
+    @property
+    def parity(self) -> str:
+        return self._parity
+
+    @parity.setter
+    def parity(self, parity: str) -> None:
+        assert not self._break, "the parity changed during a break"
+        self._parity = parity
 
     def write(self, data: bytes, /) -> None:
         if self.breaks == 0:
@@ -217,6 +246,7 @@ class FakeRelay(FakeBootloader):
             if self.before_switch.endswith(oncore.BOOTLOADER_KNOCK):
                 self._out += oncore.BOOTLOADER_KNOCK
             return
+        assert not self._break
         if self.settings_at_sync is None:
             self.settings_at_sync = (self.baudrate, self.parity)
         super().write(data)
@@ -227,6 +257,7 @@ def test_the_relay_knocks_switches_and_reaches_the_bootloader() -> None:
     boot = stm32boot.relay_bootloader(relay)
     assert relay.before_switch == stm32boot.RELAY_FILLER + oncore.BOOTLOADER_KNOCK
     assert relay.breaks == 1
+    assert not relay.break_condition
     assert stm32boot.run(boot, "id", None, go=True)
     assert relay.settings_at_sync == (stm32boot.RELAY_BAUD, serial.PARITY_EVEN)
     assert relay.started == FLASH
@@ -241,3 +272,8 @@ def test_the_relay_stops_without_the_echo() -> None:
     with pytest.raises(BootloaderError):
         stm32boot.relay_bootloader(relay, wait_s=ECHO_GIVE_UP_S)
     assert relay.breaks == 0
+
+
+def test_the_relay_stops_if_it_does_not_say_it_switched() -> None:
+    with pytest.raises(BootloaderError):
+        stm32boot.relay_bootloader(FakeRelay(says_switched=False))
