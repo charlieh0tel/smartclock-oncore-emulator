@@ -69,8 +69,9 @@ Flashes an STM32 through its ROM serial bootloader (ST AN3155, 8E1):
   command the frozen instrument had begun ends before the knock), the
   knock and its echo at 9600 8N1, a 20 ms break (timed with the break
   condition: pyserial's `send_break` holds at least 0.25 s on Linux)
-  that switches the relay and the port to 19200 8E1, the relay's `E`,
-  the bootloader at that rate, always Go
+  that switches the relay and the port to 19200 8E1, 30 ms for the
+  relay's switch byte (often garbled) to arrive and be discarded, the
+  bootloader at that rate, always Go
   (the board's power stays on), and a last break that resets the
   instrument.  On any error it stops with the instrument still frozen.
   `id` and `build` only: it refuses `write`, since a failed write in a

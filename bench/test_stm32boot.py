@@ -11,6 +11,8 @@ PRODUCT_ID = 0x44D
 """The STM32C091/92's."""
 IMAGE_BYTES = 600
 """An image over two chunks, not a whole number of words."""
+GARBLED_SWITCH = b"\xfc"
+"""The relay's E as the Z3801A's run heard it, sent before the port had switched."""
 ECHO_GIVE_UP_S = 0.05
 """A short wait for an echo that will not come."""
 
@@ -25,6 +27,8 @@ class FakeBootloader:
         self._in = b""
         self.erased = False
         self.started: int | None = None
+        self.synced = False
+        """Synced, after which 0x7F is a command's first byte, as on the part."""
 
     def reset_input_buffer(self) -> None:
         self._out = b""
@@ -47,7 +51,8 @@ class FakeBootloader:
         return data
 
     def _step(self) -> None:
-        if self._in[:1] == bytes([stm32boot.SYNC]):
+        if not self.synced and self._in[:1] == bytes([stm32boot.SYNC]):
+            self.synced = True
             self._in = self._in[1:]
             self._out += bytes([ACK])
         if len(self._in) < 2:
@@ -200,9 +205,10 @@ class FakeRelay(FakeBootloader):
     """The relay and the board behind it: the knock echoed at 9600 8N1, then, after a break,
     the bootloader at the relay's second setting."""
 
-    def __init__(self, says_switched: bool = True) -> None:
+    def __init__(self, switched: bytes = b"E") -> None:
         super().__init__()
-        self._says_switched = says_switched
+        self._switched = switched
+        self._late = b""
         self._break = False
         self._baudrate = stm32boot.ONCORE_BAUD
         self._parity = serial.PARITY_NONE
@@ -218,8 +224,7 @@ class FakeRelay(FakeBootloader):
     def break_condition(self, on: bool) -> None:
         if self._break and not on:
             self.breaks += 1
-            if self._says_switched:
-                self._out += stm32boot.RELAY_SWITCHED
+            self._out += self._switched
         self._break = on
 
     @property
@@ -239,6 +244,14 @@ class FakeRelay(FakeBootloader):
     def parity(self, parity: str) -> None:
         assert not self._break, "the parity changed during a break"
         self._parity = parity
+
+    def late(self, data: bytes) -> None:
+        """`data` arriving after the input was flushed, ahead of the bootloader's answers."""
+        self._late = data
+
+    def reset_input_buffer(self) -> None:
+        super().reset_input_buffer()
+        self._out, self._late = self._late, b""
 
     def write(self, data: bytes, /) -> None:
         if self.breaks == 0:
@@ -274,6 +287,9 @@ def test_the_relay_stops_without_the_echo() -> None:
     assert relay.breaks == 0
 
 
-def test_the_relay_stops_if_it_does_not_say_it_switched() -> None:
-    with pytest.raises(BootloaderError):
-        stm32boot.relay_bootloader(FakeRelay(says_switched=False))
+def test_a_garbled_switch_byte_late_is_passed_over() -> None:
+    relay = FakeRelay(switched=GARBLED_SWITCH)
+    boot = stm32boot.relay_bootloader(relay)
+    relay.late(GARBLED_SWITCH)
+    assert stm32boot.run(boot, "id", None, go=True)
+    assert relay.started == FLASH

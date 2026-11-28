@@ -65,10 +65,10 @@ RELAY_BAUD = 19200
 """The bootloader's rate through the relay, 8E1: the relay's second setting."""
 RELAY_BREAK_S = 0.02
 """A break: the first switches the relay to its second setting, the next resets the instrument."""
-RELAY_SWITCHED = b"E"
-"""What the relay sends at its second setting once it has switched."""
-RELAY_SWITCH_WAIT_S = 0.1
-"""How long its switch may take to be heard: well inside the u-blox's start after the jump."""
+RELAY_SETTLE_S = 0.03
+"""After the switch, time for the byte the relay sends on switching (`E`, often garbled, as the
+port is still at 9600 8N1 when it comes) to arrive through a USB adapter's latency timer, to be
+discarded before the sync."""
 LONGEST_COMMAND = 22
 """The board's longest instrument command, `@@` through LF (smartclock-gps `MAX_COMMAND`)."""
 RELAY_FILLER = bytes(LONGEST_COMMAND)
@@ -160,12 +160,15 @@ class Bootloader:
 
     def connect(self) -> None:
         """Syncs the bootloader's baud rate.  One already synced takes 0x7F as a command's
-        first byte and waits; a second makes a bad command, which it answers NACK."""
+        first byte and waits; a second makes a bad command, which it answers NACK.  A stray
+        byte before the answer (one late through a USB adapter) is passed over, not taken
+        for no answer, which would send a second 0x7F to a bootloader that took the first."""
         self._port.reset_input_buffer()
         for _ in range(2):
             self._port.write(bytes([SYNC]))
-            if self._port.read(1) in (bytes([ACK]), bytes([NACK])):
-                return
+            while reply := self._port.read(1):
+                if reply in (bytes([ACK]), bytes([NACK])):
+                    return
         raise BootloaderError("no answer to 0x7F: is the bootloader running?")
 
     def product_id(self) -> int:
@@ -248,19 +251,13 @@ def relay_break(port: RelayPort) -> None:
 
 def relay_bootloader(port: RelayPort, wait_s: float = ECHO_WAIT_S) -> Bootloader:
     """The board's bootloader through the relay on `port`, open at 9600 8N1: the knock, its
-    echo, the break that switches both the relay and `port` to 19200 8E1, and the relay's word
-    that it has, read here so that the bootloader's first answer is the next byte."""
+    echo, and the break that switches both the relay and `port` to 19200 8E1."""
     if not knocked(port, wait_s, lead=RELAY_FILLER):
         raise BootloaderError("no answer to the knock")
     relay_break(port)
     port.baudrate = RELAY_BAUD
     port.parity = serial.PARITY_EVEN
-    heard = b""
-    deadline = time.monotonic() + RELAY_SWITCH_WAIT_S
-    while RELAY_SWITCHED not in heard and time.monotonic() < deadline:
-        heard += port.read(len(RELAY_SWITCHED))
-    if RELAY_SWITCHED not in heard:
-        raise BootloaderError(f"the relay did not say it switched (heard {heard!r})")
+    time.sleep(RELAY_SETTLE_S)
     return Bootloader(port)
 
 
