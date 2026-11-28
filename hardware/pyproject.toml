@@ -24,3 +24,7 @@ select = ["E", "F", "W", "I", "UP", "B", "ANN", "RUF"]
 strict = true
 files = ["."]
 exclude = ["^ee_tooling/"]
+
+[tool.pytest.ini_options]
+# ee_tooling's own tests run in its repository.
+norecursedirs = ["ee_tooling", ".*", "*.egg-info"]
