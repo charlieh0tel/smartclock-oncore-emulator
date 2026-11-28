@@ -65,6 +65,10 @@ RELAY_BAUD = 19200
 """The bootloader's rate through the relay, 8E1: the relay's second setting."""
 RELAY_BREAK_S = 0.02
 """A break: the first switches the relay to its second setting, the next resets the instrument."""
+RELAY_SWITCHED = b"E"
+"""What the relay sends at its second setting once it has switched."""
+RELAY_SWITCH_WAIT_S = 0.1
+"""How long its switch may take to be heard: well inside the u-blox's start after the jump."""
 LONGEST_COMMAND = 22
 """The board's longest instrument command, `@@` through LF (smartclock-gps `MAX_COMMAND`)."""
 RELAY_FILLER = bytes(LONGEST_COMMAND)
@@ -84,12 +88,12 @@ class Port(Protocol):
 
 
 class RelayPort(Port, Protocol):
-    """What the relay needs besides: a break, and the rate and parity changed while open."""
+    """What the relay needs besides: the break condition, and the rate and parity changed while
+    open."""
 
     baudrate: int
     parity: str
-
-    def send_break(self, duration: float = ..., /) -> None: ...
+    break_condition: bool
 
 
 class BootloaderError(Exception):
@@ -234,14 +238,29 @@ class Bootloader:
                 raise BootloaderError(f"verify: differs at {FLASH + offset:#010x}")
 
 
+def relay_break(port: RelayPort) -> None:
+    """A break of [`RELAY_BREAK_S`], timed here: pyserial's `send_break` on Linux is
+    `tcsendbreak(fd, int(duration / 0.25))`, 0.25 to 0.5 s for anything under 0.25 s."""
+    port.break_condition = True
+    time.sleep(RELAY_BREAK_S)
+    port.break_condition = False
+
+
 def relay_bootloader(port: RelayPort, wait_s: float = ECHO_WAIT_S) -> Bootloader:
     """The board's bootloader through the relay on `port`, open at 9600 8N1: the knock, its
-    echo, and the break that switches both the relay and `port` to 19200 8E1."""
+    echo, the break that switches both the relay and `port` to 19200 8E1, and the relay's word
+    that it has, read here so that the bootloader's first answer is the next byte."""
     if not knocked(port, wait_s, lead=RELAY_FILLER):
         raise BootloaderError("no answer to the knock")
-    port.send_break(RELAY_BREAK_S)
+    relay_break(port)
     port.baudrate = RELAY_BAUD
     port.parity = serial.PARITY_EVEN
+    heard = b""
+    deadline = time.monotonic() + RELAY_SWITCH_WAIT_S
+    while RELAY_SWITCHED not in heard and time.monotonic() < deadline:
+        heard += port.read(len(RELAY_SWITCHED))
+    if RELAY_SWITCHED not in heard:
+        raise BootloaderError(f"the relay did not say it switched (heard {heard!r})")
     return Bootloader(port)
 
 
@@ -300,7 +319,7 @@ def main() -> int:
             except BootloaderError as e:
                 print(f"{args.device}: {e}; the instrument stays frozen", file=sys.stderr)
                 return 1
-            port.send_break(RELAY_BREAK_S)
+            relay_break(port)
             print("instrument reset")
         return 0 if found else 1
     if args.knock:

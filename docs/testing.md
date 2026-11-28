@@ -22,7 +22,7 @@ emulation, against `oncore-host` and the board.
 | `make lint` | every crate formatted (`oncore-fw` too), clippy on every firmware build, ruff and strict mypy on the Python (`firmware/tools`, `bench`, `hardware`), and the `bench` and `hardware` tests, the stack-frame gate (`make stack`) | yes |
 | `make images` | the production image of each model (vp, ut-plus, vp-six, z3817a), ELF and raw binary, named by commit, with SHA256SUMS, in `firmware/oncore-fw/target/images/` | yes: kept as the run's artifact, and a tag's GitHub release |
 | `firmware/tools` unittest, 24 | `board_serial.py`, `stack_frames.py`, `coverage.py` (the coverage page current, every claim recorded, its picture there) | yes, in `make stack` |
-| `bench` pytest, 68 | almanac, ephemeris, `bench.py`, `instrument.py`, `pps_compare.py`, stability, `stm32boot.py`, `tic_setup.py`: no instrument, counter or receiver attached | yes, in `make lint` |
+| `bench` pytest, 69 | almanac, ephemeris, `bench.py`, `instrument.py`, `pps_compare.py`, stability, `stm32boot.py`, `tic_setup.py`: no instrument, counter or receiver attached | yes, in `make lint` |
 | `hardware` pytest, 3 | `stand_in_models.py` (ee_tooling's own tests run in its repository) | yes, in `make lint` |
 
 ## On the board
