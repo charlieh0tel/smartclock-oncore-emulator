@@ -22,4 +22,5 @@ select = ["E", "F", "W", "I", "UP", "B", "ANN", "RUF"]
 
 [tool.mypy]
 strict = true
-files = ["stand_in_models.py", "test_stand_in_models.py"]
+files = ["."]
+exclude = ["^ee_tooling/"]

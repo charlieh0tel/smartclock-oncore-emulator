@@ -22,6 +22,8 @@ jobs:
           # The whole history and the tags, for `git describe` (the build
           # identity and the images' names) and the build date.
           fetch-depth: 0
+          # hardware/ee_tooling, hardware's Python environment, for its checks.
+          submodules: true
       - uses: astral-sh/setup-uv@v7
       - name: Toolchain
         working-directory: firmware
