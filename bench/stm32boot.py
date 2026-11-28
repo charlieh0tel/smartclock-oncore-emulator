@@ -8,10 +8,17 @@ as `firmware/tools/board_serial.py` does over SWD.
     uv run python stm32boot.py id [--knock] DEVICE
     uv run python stm32boot.py write [--knock] [--go] DEVICE FIRMWARE.bin
     uv run python stm32boot.py build [--knock] [--go] DEVICE
+    uv run python stm32boot.py {id,build} --relay DEVICE
 
 The board's bootloader must be running: a blank part starts it itself; `--knock` has the
 emulator's firmware start it, with the bench knock, `@@Zb`, on the instrument's port (J1 through
 the jig, or J5) at 9600 8N1, answered with the same frame before the board jumps.
+
+`--relay` reaches a board in a SmartClock through the instrument's console relay
+(`smartclock-cli passthrough --baud 9600 --framing 8N1 --then-baud 19200 --then-framing 8E1`,
+started first), DEVICE the instrument's port: zeros, the knock and its echo at 9600 8N1, a break
+that switches the relay to 19200 8E1, the bootloader at that rate, Go, and a last break that resets
+the instrument.
 """
 
 import argparse
@@ -54,6 +61,15 @@ ONCORE_BAUD = 9600
 ECHO_WAIT_S = 2.0
 """How long the knock's echo may take: a command is answered within the second."""
 ECHO_READ_TIMEOUT_S = 0.1
+RELAY_BAUD = 19200
+"""The bootloader's rate through the relay, 8E1: the relay's second setting."""
+RELAY_BREAK_S = 0.02
+"""A break: the first switches the relay to its second setting, the next resets the instrument."""
+LONGEST_COMMAND = 22
+"""The board's longest instrument command, `@@` through LF (smartclock-gps `MAX_COMMAND`)."""
+RELAY_FILLER = bytes(LONGEST_COMMAND)
+"""Zeros before the knock through the relay: a command the instrument had begun when the relay
+froze it ends in them (a bad checksum), and the board's deframer is idle for the knock."""
 
 
 class Port(Protocol):
@@ -67,14 +83,24 @@ class Port(Protocol):
     def flush(self) -> None: ...
 
 
+class RelayPort(Port, Protocol):
+    """What the relay needs besides: a break, and the rate and parity changed while open."""
+
+    baudrate: int
+    parity: str
+
+    def send_break(self, duration: float = ..., /) -> None: ...
+
+
 class BootloaderError(Exception):
     """The bootloader refused or did not answer."""
 
 
-def knocked(port: Port, wait_s: float = ECHO_WAIT_S) -> bool:
-    """Sends the knock on `port` and whether its echo came back within `wait_s`."""
+def knocked(port: Port, wait_s: float = ECHO_WAIT_S, lead: bytes = b"") -> bool:
+    """Sends `lead` and the knock on `port` and whether the knock's echo came back within
+    `wait_s`."""
     port.reset_input_buffer()
-    port.write(oncore.BOOTLOADER_KNOCK)
+    port.write(lead + oncore.BOOTLOADER_KNOCK)
     port.flush()
     heard = b""
     deadline = time.monotonic() + wait_s
@@ -208,11 +234,49 @@ class Bootloader:
                 raise BootloaderError(f"verify: differs at {FLASH + offset:#010x}")
 
 
+def relay_bootloader(port: RelayPort, wait_s: float = ECHO_WAIT_S) -> Bootloader:
+    """The board's bootloader through the relay on `port`, open at 9600 8N1: the knock, its
+    echo, and the break that switches both the relay and `port` to 19200 8E1."""
+    if not knocked(port, wait_s, lead=RELAY_FILLER):
+        raise BootloaderError("no answer to the knock")
+    port.send_break(RELAY_BREAK_S)
+    port.baudrate = RELAY_BAUD
+    port.parity = serial.PARITY_EVEN
+    return Bootloader(port)
+
+
+def run(boot: Bootloader, action: str, image: Path | None, go: bool) -> bool:
+    """`action` on the synced bootloader `boot`, then Go if `go`; whether it found what it
+    looked for."""
+    boot.connect()
+    print(f"product ID {boot.product_id():#05x}")
+    found = True
+    if action == "write" and image is not None:
+        data = image.read_bytes()
+        boot.flash(data)
+        print(f"wrote and verified {len(data)} bytes at {FLASH:#010x}")
+    elif action == "build":
+        identity = boot.build_identity()
+        found = identity is not None
+        print(f"its build: {identity}" if found else "its build: none in flash")
+    if go:
+        boot.go(FLASH)
+        print("started")
+    elif action != "id":
+        print("power-cycle the board to start it")
+    return found
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument(
         "--knock", action="store_true", help="start the emulator's bootloader with @@Zb first"
+    )
+    common.add_argument(
+        "--relay",
+        action="store_true",
+        help="through a SmartClock's console relay: knock, switch, bootloader, Go, reset",
     )
     common.add_argument("device")
     sub = parser.add_subparsers(dest="action", required=True)
@@ -223,6 +287,22 @@ def main() -> int:
     write.add_argument("image", type=Path)
     sub.add_parser("build", parents=[common, go])
     args = parser.parse_args()
+    if args.relay and args.action == "write":
+        parser.error("--relay does not write yet: a failed write in a closed instrument needs SWD")
+    image = getattr(args, "image", None)
+    if args.relay:
+        with serial.Serial(args.device, ONCORE_BAUD, timeout=ECHO_READ_TIMEOUT_S) as port:
+            try:
+                boot = relay_bootloader(port)
+                print("knock answered; relay switched")
+                port.timeout = READ_TIMEOUT_S
+                found = run(boot, args.action, image, go=True)
+            except BootloaderError as e:
+                print(f"{args.device}: {e}; the instrument stays frozen", file=sys.stderr)
+                return 1
+            port.send_break(RELAY_BREAK_S)
+            print("instrument reset")
+        return 0 if found else 1
     if args.knock:
         with serial.Serial(args.device, ONCORE_BAUD, timeout=ECHO_READ_TIMEOUT_S) as port:
             if not knocked(port):
@@ -232,25 +312,8 @@ def main() -> int:
     with serial.Serial(
         args.device, BAUD, parity=serial.PARITY_EVEN, timeout=READ_TIMEOUT_S
     ) as port:
-        boot = Bootloader(port)
         try:
-            boot.connect()
-            print(f"product ID {boot.product_id():#05x}")
-            found = True
-            if args.action == "write":
-                image = args.image.read_bytes()
-                boot.flash(image)
-                print(f"wrote and verified {len(image)} bytes at {FLASH:#010x}")
-            elif args.action == "build":
-                identity = boot.build_identity()
-                found = identity is not None
-                print(f"its build: {identity}" if found else "its build: none in flash")
-            if args.action != "id":
-                if args.go:
-                    boot.go(FLASH)
-                    print("started")
-                else:
-                    print("power-cycle the board to start it")
+            found = run(Bootloader(port), args.action, image, go=getattr(args, "go", False))
         except BootloaderError as e:
             print(f"{args.device}: {e}", file=sys.stderr)
             return 1

@@ -62,6 +62,17 @@ Flashes an STM32 through its ROM serial bootloader (ST AN3155, 8E1):
   power-cycle the board.  A blank board's first flash needs a power
   cycle, not `--go`.  The knock restarts the board: bench only, never
   in an instrument mid-run.
+- `--relay` reaches a board in a SmartClock through the instrument's
+  console relay, started first with `smartclock-cli passthrough --baud
+  9600 --framing 8N1 --then-baud 19200 --then-framing 8E1`, DEVICE the
+  instrument's port: 22 zeros (the board's longest command, so a
+  command the frozen instrument had begun ends before the knock), the
+  knock and its echo at 9600 8N1, a 20 ms break that switches the relay
+  and the port to 19200 8E1, the bootloader at that rate, always Go
+  (the board's power stays on), and a last break that resets the
+  instrument.  On any error it stops with the instrument still frozen.
+  `id` and `build` only: it refuses `write`, since a failed write in a
+  closed instrument needs SWD.  Not yet run on hardware.
 
 An update: `uv run python stm32boot.py write --knock --go DEVICE
 oncore-fw.bin`.  Its build: `uv run python stm32boot.py build --knock --go DEVICE`.
