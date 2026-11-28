@@ -19,9 +19,11 @@ emulation, against `oncore-host` and the board.
 | `oncore-core/tests/golden.rs`, 4 | the trace through each image's model, the 58503A and Z3801A on the VP and the 58503B and Z3816A on the UT Plus, with the commands each image sent: every Oncore byte against `firmware/testdata/golden/` | yes |
 | `oncore-app` unit tests, 10 | the set-up: a module heard set up from its port, a refused step failing it unsaved and resetting the module, failed set-ups backing off, a module not heard looked for at each baud rate, the search going on across a module reset; module requests: one at a time on their ACKs, a refused one sent again then given up, a hold's ACK giving the mode, a withheld hold not queued, MGA-INI unacknowledged, a closed or full queue | yes |
 | `oncore-app/tests/run.rs`, 10 | a receiver configured before power-up sending unasked, module set-up, a burst of instrument commands answered, the mask angle passed through, a module at 9600 saved, the bench reset, the bench knock for the bootloader, answering while the module is silent, the switch to eight channels, a silent module reset | yes |
-| `make lint` | every crate formatted (`oncore-fw` too), clippy on every firmware build, ruff and strict mypy on the Python (`firmware/tools`, `bench`, `hardware`), the stack-frame gate (`make stack`) | yes |
+| `make lint` | every crate formatted (`oncore-fw` too), clippy on every firmware build, ruff and strict mypy on the Python (`firmware/tools`, `bench`, `hardware`), and the `bench` and `hardware` tests, the stack-frame gate (`make stack`) | yes |
 | `make images` | the production image of each model (vp, ut-plus, vp-six, z3817a), ELF and raw binary, named by commit, with SHA256SUMS, in `firmware/oncore-fw/target/images/` | yes: kept as the run's artifact, and a tag's GitHub release |
 | `firmware/tools` unittest, 24 | `board_serial.py`, `stack_frames.py`, `coverage.py` (the coverage page current, every claim recorded, its picture there) | yes, in `make stack` |
+| `bench` pytest, 66 | almanac, ephemeris, `bench.py`, `instrument.py`, `pps_compare.py`, stability, `stm32boot.py`, `tic_setup.py`: no instrument, counter or receiver attached | yes, in `make lint` |
+| `hardware` pytest, 3 | `stand_in_models.py` (ee_tooling's own tests run in its repository) | yes, in `make lint` |
 
 ## On the board
 

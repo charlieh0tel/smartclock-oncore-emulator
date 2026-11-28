@@ -29,7 +29,7 @@ cargo build --release --no-default-features   # production
 cargo run --release --example timing   # the emulator's work, timed
 
 cd ../..   # the repository root
-make lint                      # formatting, clippy on every build, ruff and mypy, stack frames 1.5 KB at most
+make lint                      # formatting, clippy on every build, ruff, mypy and pytest, stack frames 1.5 KB at most
 make flash                     # the production build onto the board on the probe
 make flash-rtt                 # the logging build, staying attached for its log
 make flash-ut-plus             # the production build as the UT Plus (58503B, Z3816A)

@@ -69,8 +69,8 @@ images:
 # Before each commit (AGENTS.md): every crate formatted, the workspace's
 # and oncore-fw's (its own workspace, which `cargo fmt` in firmware/ does
 # not reach), clippy on the host crates and on every firmware build,
-# warnings as errors, the Python checks (firmware/tools, bench, hardware;
-# hardware's mypy files are its pyproject.toml's), and `stack`.
+# warnings as errors, the Python checks and tests (firmware/tools, bench,
+# hardware; hardware's mypy files are its pyproject.toml's), and `stack`.
 lint: stack
 	cd firmware && cargo fmt --check
 	cd firmware/oncore-fw && cargo fmt --check
@@ -85,8 +85,8 @@ lint: stack
 	done
 	cd firmware/oncore-fw && cargo clippy --release --examples -- -D warnings
 	cd firmware/tools && uv run ruff format --check . && uv run ruff check . && uv run mypy .
-	cd bench && uv run ruff format --check . && uv run ruff check . && uv run mypy .
-	cd hardware && uv run ruff format --check . && uv run ruff check . && uv run mypy
+	cd bench && uv run ruff format --check . && uv run ruff check . && uv run mypy . && uv run pytest -q
+	cd hardware && uv run ruff format --check . && uv run ruff check . && uv run mypy && uv run pytest -q
 
 # Every firmware build, with and without rtt, nucleo, ut-plus,
 # vp-six and z3817a,
