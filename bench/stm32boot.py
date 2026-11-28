@@ -230,15 +230,18 @@ class Bootloader:
         return identity.decode("ascii", errors="replace")
 
     def flash(self, image: bytes) -> None:
-        """Erases flash, writes `image` from its start, and reads it back."""
+        """Erases flash, then writes `image` and reads it back, its first chunk (the vector
+        table) last: until then flash reads empty at power-on, and the part starts its ROM
+        bootloader, not a part-written image."""
         self.mass_erase()
         chunks = range(0, len(image), CHUNK)
-        for offset in chunks:
-            self.write(FLASH + offset, image[offset : offset + CHUNK])
-        for offset in chunks:
-            want = image[offset : offset + CHUNK]
-            if self.read(FLASH + offset, len(want)) != want:
-                raise BootloaderError(f"verify: differs at {FLASH + offset:#010x}")
+        for part in (chunks[1:], chunks[:1]):
+            for offset in part:
+                self.write(FLASH + offset, image[offset : offset + CHUNK])
+            for offset in part:
+                want = image[offset : offset + CHUNK]
+                if self.read(FLASH + offset, len(want)) != want:
+                    raise BootloaderError(f"verify: differs at {FLASH + offset:#010x}")
 
 
 def relay_break(port: RelayPort) -> None:
@@ -303,8 +306,6 @@ def main() -> int:
     write.add_argument("image", type=Path)
     sub.add_parser("build", parents=[common, go])
     args = parser.parse_args()
-    if args.relay and args.action == "write":
-        parser.error("--relay does not write yet: a failed write in a closed instrument needs SWD")
     image = getattr(args, "image", None)
     if args.relay:
         with serial.Serial(args.device, ONCORE_BAUD, timeout=ECHO_READ_TIMEOUT_S) as port:
