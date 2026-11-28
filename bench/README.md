@@ -78,7 +78,8 @@ empty at power-on and the part starts its ROM bootloader.  For parts
   instrument.  On any error it stops with the instrument still frozen
   and the board in its bootloader.  A write that fails leaves the
   vector table erased: power-cycled, the board starts its ROM
-  bootloader, which the knock does not reach (SWD).
+  bootloader, which the knock does not reach (SWD).  A 110 KB image
+  in a Z3801A: 2 min 46 s, Go and the reset included.
 
 An update: `uv run python stm32boot.py write --knock --go DEVICE
 oncore-fw.bin`.  Its build: `uv run python stm32boot.py build --knock --go DEVICE`.
