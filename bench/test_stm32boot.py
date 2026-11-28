@@ -1,6 +1,7 @@
 """Tests for the ROM bootloader's protocol against a fake bootloader."""
 
 import pytest
+import serial
 
 import oncore
 import stm32boot
@@ -10,6 +11,8 @@ PRODUCT_ID = 0x44D
 """The STM32C091/92's."""
 IMAGE_BYTES = 600
 """An image over two chunks, not a whole number of words."""
+ECHO_GIVE_UP_S = 0.05
+"""A short wait for an echo that will not come."""
 
 
 class FakeBootloader:
@@ -160,7 +163,7 @@ def test_the_knock_and_its_echo() -> None:
     echoed = FakePort(oncore.BOOTLOADER_KNOCK)
     assert stm32boot.knocked(echoed)
     assert echoed.written == oncore.BOOTLOADER_KNOCK
-    assert not stm32boot.knocked(FakePort(b""), wait_s=0.05)
+    assert not stm32boot.knocked(FakePort(b""), wait_s=ECHO_GIVE_UP_S)
 
 
 IDENTITY = "ONCORE-BUILD fe3802acd01d vp 20261121"
@@ -191,3 +194,50 @@ def test_the_build_identity_is_read_from_flash(offset: int) -> None:
 
 def test_flash_without_a_build_identity() -> None:
     assert Bootloader(FakeBootloader()).build_identity() is None
+
+
+class FakeRelay(FakeBootloader):
+    """The relay and the board behind it: the knock echoed at 9600 8N1, then, after a break,
+    the bootloader at the relay's second setting."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.baudrate = stm32boot.ONCORE_BAUD
+        self.parity = serial.PARITY_NONE
+        self.breaks = 0
+        self.before_switch = b""
+        self.settings_at_sync: tuple[int, str] | None = None
+
+    def send_break(self, duration: float = stm32boot.RELAY_BREAK_S, /) -> None:
+        self.breaks += 1
+
+    def write(self, data: bytes, /) -> None:
+        if self.breaks == 0:
+            self.before_switch += data
+            if self.before_switch.endswith(oncore.BOOTLOADER_KNOCK):
+                self._out += oncore.BOOTLOADER_KNOCK
+            return
+        if self.settings_at_sync is None:
+            self.settings_at_sync = (self.baudrate, self.parity)
+        super().write(data)
+
+
+def test_the_relay_knocks_switches_and_reaches_the_bootloader() -> None:
+    relay = FakeRelay()
+    boot = stm32boot.relay_bootloader(relay)
+    assert relay.before_switch == stm32boot.RELAY_FILLER + oncore.BOOTLOADER_KNOCK
+    assert relay.breaks == 1
+    assert stm32boot.run(boot, "id", None, go=True)
+    assert relay.settings_at_sync == (stm32boot.RELAY_BAUD, serial.PARITY_EVEN)
+    assert relay.started == FLASH
+
+
+def test_the_relay_stops_without_the_echo() -> None:
+    class Unanswered(FakeRelay):
+        def write(self, data: bytes, /) -> None:
+            self.before_switch += data
+
+    relay = Unanswered()
+    with pytest.raises(BootloaderError):
+        stm32boot.relay_bootloader(relay, wait_s=ECHO_GIVE_UP_S)
+    assert relay.breaks == 0
